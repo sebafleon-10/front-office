@@ -1,0 +1,90 @@
+import { describe, expect, it } from "vitest";
+import { runSeason, type SeasonInputs } from "@/lib/engine";
+import { PRESETS } from "@/lib/assumptions";
+
+const balanced = (
+  preset: (typeof PRESETS)[keyof typeof PRESETS],
+): SeasonInputs => ({
+  wages: preset.wages,
+  academy: preset.academy,
+  marketing: preset.marketing,
+  facilities: preset.facilities,
+  commercial: preset.commercial,
+  price: preset.price,
+  weightSport: 0.5,
+  weightFinance: 0.5,
+});
+
+describe("runSeason gold scenarios", () => {
+  it("Balanced finishes 6th with about -$74,973 net and health ~48.5", () => {
+    const r = runSeason(balanced(PRESETS.balanced));
+    expect(r.points).toBe(20);
+    expect(r.position).toBe(6);
+    expect(r.net).toBeCloseTo(-74_973, 0);
+    expect(Math.abs(r.health - 48.5)).toBeLessThan(0.1);
+  });
+
+  it("Buy wins now finishes 4th with about -$260,686 net and health ~48.3", () => {
+    const r = runSeason(balanced(PRESETS.buyWinsNow));
+    expect(r.points).toBe(24);
+    expect(r.position).toBe(4);
+    expect(r.net).toBeCloseTo(-260_686, 0);
+    expect(Math.abs(r.health - 48.3)).toBeLessThan(0.1);
+  });
+
+  it("Develop and sell finishes 5th with about +$90,660 net and health ~61.4", () => {
+    const r = runSeason(balanced(PRESETS.developAndSell));
+    expect(r.points).toBe(21);
+    expect(r.position).toBe(5);
+    expect(r.net).toBeCloseTo(90_660, 0);
+    expect(Math.abs(r.health - 61.4)).toBeLessThan(0.1);
+  });
+
+  it("Grow fanbase finishes 6th with about -$54,876 net and health ~49.5", () => {
+    const r = runSeason(balanced(PRESETS.growFanbase));
+    expect(r.points).toBe(19);
+    expect(r.position).toBe(6);
+    expect(r.net).toBeCloseTo(-54_876, 0);
+    expect(Math.abs(r.health - 49.5)).toBeLessThan(0.1);
+  });
+});
+
+describe("league table", () => {
+  it("inserts Your Club at the correct position by points", () => {
+    const r = runSeason(balanced(PRESETS.balanced));
+    expect(r.table).toHaveLength(12);
+    const yourIndex = r.table.findIndex((row) => row.isYourClub);
+    expect(yourIndex).toBe(r.position - 1);
+  });
+
+  it("orders rows by points descending", () => {
+    const r = runSeason(balanced(PRESETS.buyWinsNow));
+    for (let i = 1; i < r.table.length; i++) {
+      expect(r.table[i - 1].points).toBeGreaterThanOrEqual(r.table[i].points);
+    }
+  });
+});
+
+describe("budget meter state", () => {
+  it("flags over budget when controllable exceeds 1.2m", () => {
+    const r = runSeason({
+      wages: 1_200_000,
+      academy: 100_000,
+      marketing: 0,
+      facilities: 0,
+      commercial: 100_000,
+      price: 18,
+      weightSport: 0.5,
+      weightFinance: 0.5,
+    });
+    expect(r.controllable).toBe(1_400_000);
+    expect(r.overBudget).toBe(true);
+    expect(r.budgetRemaining).toBe(-200_000);
+  });
+
+  it("stays under budget for the balanced preset", () => {
+    const r = runSeason(balanced(PRESETS.balanced));
+    expect(r.overBudget).toBe(false);
+    expect(r.controllable).toBe(1_080_000);
+  });
+});
