@@ -4,7 +4,7 @@ import Image from "next/image";
 import { motion, useReducedMotion, type Variants } from "framer-motion";
 import { useCallback } from "react";
 
-const SECTION_ID = "command-center";
+const SECTION_ID = "interactive-model";
 
 export function Hero() {
   const reduce = useReducedMotion();
@@ -94,9 +94,9 @@ export function Hero() {
               <button
                 type="button"
                 onClick={handleEnter}
-                className="inline-flex items-center justify-center rounded-[10px] bg-[var(--color-accent)] px-5 py-3 text-[14px] font-medium text-white transition-all duration-200 ease-[cubic-bezier(0.32,0.72,0,1)] hover:brightness-110 active:scale-[0.98]"
+                className="fo-btn-primary px-5 py-3 text-[14px]"
               >
-                Enter the command center
+                See how it works
               </button>
             </motion.div>
           </div>
@@ -144,7 +144,7 @@ export function Hero() {
               : { duration: 0.28, delay: 0.4, ease: [0.32, 0.72, 0, 1] }
           }
           className="mt-12 inline-flex items-center gap-2 text-[12px] text-[var(--color-text-subtle)] transition-colors hover:text-[var(--color-text-muted)]"
-          aria-label="Scroll to the command center"
+          aria-label="Scroll to the interactive model"
         >
           More below
           <svg

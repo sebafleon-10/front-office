@@ -3,21 +3,11 @@
 import { AnimatedNumber } from "./AnimatedNumber";
 import { Card, CardEyebrow } from "./Card";
 import { HealthGauge } from "./HealthGauge";
-import { formatMoneySigned } from "@/lib/format";
+import { formatMoneySigned, ordinal } from "@/lib/format";
 import type { SeasonResult } from "@/lib/engine";
 
 interface OutcomeDashboardProps {
   result: SeasonResult;
-}
-
-function ordinal(n: number) {
-  const mod100 = n % 100;
-  if (mod100 >= 11 && mod100 <= 13) return `${n}th`;
-  const last = n % 10;
-  if (last === 1) return `${n}st`;
-  if (last === 2) return `${n}nd`;
-  if (last === 3) return `${n}rd`;
-  return `${n}th`;
 }
 
 export function OutcomeDashboard({ result }: OutcomeDashboardProps) {

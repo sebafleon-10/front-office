@@ -1,6 +1,14 @@
 import { describe, expect, it } from "vitest";
 import { runSeason, type SeasonInputs } from "@/lib/engine";
-import { PRESETS } from "@/lib/assumptions";
+import {
+  PRESETS,
+  MIN_QUALITY,
+  MAX_QUALITY,
+  MAX_PPG,
+  MAX_CONVERSION,
+  CAPACITY,
+  TEAMS,
+} from "@/lib/assumptions";
 
 const balanced = (
   preset: (typeof PRESETS)[keyof typeof PRESETS],
@@ -86,5 +94,63 @@ describe("budget meter state", () => {
     const r = runSeason(balanced(PRESETS.balanced));
     expect(r.overBudget).toBe(false);
     expect(r.controllable).toBe(1_080_000);
+  });
+});
+
+describe("clamp and boundary behavior", () => {
+  it("floors squad quality and drops to last place when nothing is spent", () => {
+    const r = runSeason({
+      wages: 0,
+      academy: 0,
+      marketing: 0,
+      facilities: 0,
+      commercial: 0,
+      price: 18,
+      weightSport: 0.5,
+      weightFinance: 0.5,
+    });
+    expect(r.quality).toBe(MIN_QUALITY);
+    expect(r.position).toBe(TEAMS); // bottom of the table
+  });
+
+  it("caps squad quality, points-per-game, and placement under extreme spend", () => {
+    const r = runSeason({
+      wages: 5_000_000,
+      academy: 2_000_000,
+      marketing: 400_000,
+      facilities: 400_000,
+      commercial: 200_000,
+      price: 18,
+      weightSport: 0.5,
+      weightFinance: 0.5,
+    });
+    expect(r.quality).toBe(MAX_QUALITY);
+    expect(r.ppg).toBeCloseTo(MAX_PPG, 5);
+    expect(r.position).toBe(1); // champions
+  });
+
+  it("caps conversion and attendance at stadium capacity in peak demand", () => {
+    const r = runSeason({
+      wages: 1_200_000,
+      academy: 600_000,
+      marketing: 400_000,
+      facilities: 400_000,
+      commercial: 200_000,
+      price: 8,
+      weightSport: 0.5,
+      weightFinance: 0.5,
+    });
+    expect(r.conversion).toBe(MAX_CONVERSION);
+    expect(r.attendance).toBe(CAPACITY);
+  });
+
+  it("collapses club health onto a single score at the weighting extremes", () => {
+    const base = balanced(PRESETS.balanced);
+    const sportOnly = runSeason({ ...base, weightSport: 1, weightFinance: 0 });
+    const financeOnly = runSeason({ ...base, weightSport: 0, weightFinance: 1 });
+    expect(sportOnly.health).toBeCloseTo(sportOnly.sportScore, 5);
+    expect(financeOnly.health).toBeCloseTo(financeOnly.finScore, 5);
+    // The two definitions of success diverge for the same season.
+    expect(Math.abs(sportOnly.health - financeOnly.health)).toBeGreaterThan(1);
   });
 });

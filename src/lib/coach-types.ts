@@ -4,7 +4,3 @@ export interface CoachRequestBody {
   inputs: SeasonInputs;
   result: SeasonResult;
 }
-
-export interface CoachResponseBody {
-  debrief: string;
-}

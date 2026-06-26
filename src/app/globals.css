@@ -8,13 +8,13 @@
   --color-hairline-strong: rgba(255, 255, 255, 0.12);
   --color-text: #F5F7FA;
   --color-text-muted: #9BA6B2;
-  --color-text-subtle: #6B7682;
+  --color-text-subtle: #7E8B9A;
   --color-accent: #4C8DFF;
   --color-accent-muted: rgba(76, 141, 255, 0.55);
   --color-accent-soft: rgba(76, 141, 255, 0.16);
   --color-accent-glow: rgba(76, 141, 255, 0.35);
   --color-profit: #3FD27E;
-  --color-loss: #FF6B6B;
+  --color-loss: #FF7B7B;
 
   --radius-card: 16px;
   --radius-control: 10px;
@@ -115,6 +115,31 @@
   .fo-divider {
     height: 1px;
     background: var(--color-hairline);
+  }
+
+  /* Shared accent button — size (padding / text size) applied per call site. */
+  .fo-btn-primary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--radius-control);
+    background: var(--color-accent);
+    color: #ffffff;
+    font-weight: 500;
+    transition: all 200ms cubic-bezier(0.32, 0.72, 0, 1);
+  }
+
+  .fo-btn-primary:hover {
+    filter: brightness(1.1);
+  }
+
+  .fo-btn-primary:active {
+    transform: scale(0.98);
+  }
+
+  .fo-btn-primary:disabled {
+    cursor: progress;
+    opacity: 0.7;
   }
 
   .fo-pitch-stripes {

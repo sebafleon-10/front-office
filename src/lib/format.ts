@@ -65,3 +65,11 @@ export function formatPercent(value: number, digits = 0): string {
   if (!Number.isFinite(value)) return "0%";
   return `${value.toFixed(digits)}%`;
 }
+
+export function ordinal(value: number): string {
+  if (!Number.isFinite(value)) return "0th";
+  const n = Math.round(value);
+  const s = ["th", "st", "nd", "rd"];
+  const v = n % 100;
+  return n + (s[(v - 20) % 10] || s[v] || s[0]);
+}

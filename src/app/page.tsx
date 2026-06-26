@@ -8,7 +8,9 @@ import { OutcomeDashboard } from "@/components/OutcomeDashboard";
 import { LeagueTable } from "@/components/LeagueTable";
 import { PnLPanel } from "@/components/PnLPanel";
 import { CoachPanel } from "@/components/CoachPanel";
+import { AboutModel } from "@/components/AboutModel";
 import { Hero } from "@/components/Hero";
+import { SystemHero } from "@/components/SystemHero";
 
 const INITIAL_STATE: ControlState = {
   wages: PRESETS.balanced.wages,
@@ -86,6 +88,11 @@ export default function HomePage() {
     <div className="min-h-dvh">
       <Hero />
 
+      <SystemHero
+        asSection
+        onEnter={(v) => setState((s) => ({ ...s, ...v }))}
+      />
+
       <section
         id="command-center"
         style={{ scrollMarginTop: 24 }}
@@ -101,9 +108,23 @@ export default function HomePage() {
                 USL League Two · 2026 season
               </span>
             </div>
-            <span className="text-[12px] text-[var(--color-text-subtle)]">
-              Single season simulation
-            </span>
+            <div className="flex items-baseline gap-4">
+              <a
+                href="#interactive-model"
+                className="text-[12px] text-[var(--color-text-muted)] transition-colors hover:text-[var(--color-text)]"
+              >
+                How it works
+              </a>
+              <a
+                href="#about"
+                className="text-[12px] text-[var(--color-text-muted)] transition-colors hover:text-[var(--color-text)]"
+              >
+                About the model
+              </a>
+              <span className="hidden text-[12px] text-[var(--color-text-subtle)] sm:inline">
+                Single season simulation
+              </span>
+            </div>
           </div>
         </header>
 
@@ -143,6 +164,8 @@ export default function HomePage() {
             <CoachPanel inputs={inputs} result={result} />
           </div>
         </div>
+
+        <AboutModel />
 
         <footer className="mt-16 flex flex-col items-start gap-1 text-[12px] text-[var(--color-text-subtle)]">
           <span>Front Office · portfolio build</span>
