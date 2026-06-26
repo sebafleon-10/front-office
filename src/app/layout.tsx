@@ -8,7 +8,16 @@ const inter = Inter({
   display: "swap",
 });
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
+// Resolve the public origin for absolute OG/share image URLs. Prefer an
+// explicit override (e.g. a custom domain), then Vercel's built-in production
+// domain, then the per-deployment URL, then localhost for dev.
+const SITE_URL =
+  process.env.NEXT_PUBLIC_SITE_URL ??
+  (process.env.VERCEL_PROJECT_PRODUCTION_URL
+    ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
+    : process.env.VERCEL_URL
+      ? `https://${process.env.VERCEL_URL}`
+      : "http://localhost:3000");
 const TITLE = "Front Office — run the club";
 const DESCRIPTION =
   "An interactive business simulation for running a lower league soccer club for one season. Set six decisions and watch the league finish and full season finances respond live.";
