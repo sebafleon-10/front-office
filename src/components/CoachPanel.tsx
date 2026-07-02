@@ -1,21 +1,31 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Card, CardEyebrow, CardTitle } from "./Card";
 import type { SeasonInputs, SeasonResult } from "@/lib/engine";
-import type { CoachRequestBody } from "@/lib/coach-types";
+import type { CoachRequestBody, CoachRisk } from "@/lib/coach-types";
 
 interface CoachPanelProps {
   inputs: SeasonInputs;
   result: SeasonResult;
+  /** Risk profile from the latest season run, when it matches these inputs. */
+  risk?: CoachRisk | null;
+  /** Increment to request an automatic generate (fired after a season run). */
+  autoGenerate?: number;
 }
 
 type Source = "claude" | "fallback" | null;
 
-export function CoachPanel({ inputs, result }: CoachPanelProps) {
+export function CoachPanel({
+  inputs,
+  result,
+  risk,
+  autoGenerate = 0,
+}: CoachPanelProps) {
   const [debrief, setDebrief] = useState<string>("");
   const [source, setSource] = useState<Source>(null);
+  const [modelLabel, setModelLabel] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [genKey, setGenKey] = useState<string | null>(null);
@@ -29,7 +39,7 @@ export function CoachPanel({ inputs, result }: CoachPanelProps) {
     setSource(null);
     setGenKey(key);
     try {
-      const body: CoachRequestBody = { inputs, result };
+      const body: CoachRequestBody = { inputs, result, risk: risk ?? undefined };
       const res = await fetch("/api/coach", {
         method: "POST",
         headers: { "content-type": "application/json" },
@@ -40,6 +50,7 @@ export function CoachPanel({ inputs, result }: CoachPanelProps) {
       }
       const src = res.headers.get("x-coach-source");
       setSource(src === "claude" || src === "fallback" ? src : null);
+      setModelLabel(res.headers.get("x-coach-model"));
 
       const reader = res.body.getReader();
       const decoder = new TextDecoder();
@@ -77,16 +88,29 @@ export function CoachPanel({ inputs, result }: CoachPanelProps) {
     hasDebrief && !loading && genKey !== null && genKey !== JSON.stringify(inputs);
   const sourceLabel =
     source === "claude"
-      ? "Written live by Claude Opus 4.8"
+      ? `Written live by ${modelLabel ?? "Claude"}`
       : source === "fallback"
         ? "Sample debrief"
         : null;
+
+  // A season run requests one automatic debrief; skip when this exact
+  // strategy already has one (or one is drafting).
+  const lastAutoRef = useRef(0);
+  useEffect(() => {
+    if (!autoGenerate || autoGenerate === lastAutoRef.current) return;
+    lastAutoRef.current = autoGenerate;
+    if (loading) return;
+    if (hasDebrief && genKey === JSON.stringify(inputs)) return;
+    const t = window.setTimeout(() => void handleGenerate(), 0);
+    return () => window.clearTimeout(t);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [autoGenerate]);
 
   return (
     <Card>
       <header className="mb-5 flex items-baseline justify-between gap-4">
         <div>
-          <CardEyebrow>Boardroom</CardEyebrow>
+          <CardEyebrow>The board&rsquo;s verdict</CardEyebrow>
           <CardTitle className="mt-1">Season debrief</CardTitle>
         </div>
         <button

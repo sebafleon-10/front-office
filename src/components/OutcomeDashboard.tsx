@@ -3,14 +3,17 @@
 import { AnimatedNumber } from "./AnimatedNumber";
 import { Card, CardEyebrow } from "./Card";
 import { HealthGauge } from "./HealthGauge";
-import { formatMoneySigned, ordinal } from "@/lib/format";
+import { formatCompactMoney, formatMoneySigned, ordinal } from "@/lib/format";
 import type { SeasonResult } from "@/lib/engine";
+import type { MonteCarloSummary } from "@/lib/simulate";
 
 interface OutcomeDashboardProps {
   result: SeasonResult;
+  /** Latest season-run summary, only when it matches the current plan. */
+  risk?: MonteCarloSummary | null;
 }
 
-export function OutcomeDashboard({ result }: OutcomeDashboardProps) {
+export function OutcomeDashboard({ result, risk }: OutcomeDashboardProps) {
   const netPositive = result.net >= 0;
   const netColor = netPositive
     ? "text-[var(--color-profit)]"
@@ -39,6 +42,12 @@ export function OutcomeDashboard({ result }: OutcomeDashboardProps) {
         <p className="mt-3 text-[13px] text-[var(--color-text-muted)]">
           {result.positionLabel} · {result.points} pts from 14 games
         </p>
+        {risk && (
+          <p className="fo-tnum mt-1 text-[12px] text-[var(--color-accent)]">
+            {ordinal(risk.positionP5)}–{ordinal(risk.positionP95)} in 90% of{" "}
+            {risk.runs.toLocaleString("en-US")} simulated seasons
+          </p>
+        )}
       </Card>
 
       <Card className="flex flex-col justify-center">
@@ -51,6 +60,12 @@ export function OutcomeDashboard({ result }: OutcomeDashboardProps) {
         <p className="mt-3 text-[13px] text-[var(--color-text-muted)]">
           {netSubtitle}
         </p>
+        {risk && (
+          <p className="fo-tnum mt-1 text-[12px] text-[var(--color-accent)]">
+            {formatCompactMoney(risk.netP5)} to {formatCompactMoney(risk.netP95)}{" "}
+            across the middle 90% of seasons
+          </p>
+        )}
       </Card>
 
       <Card className="flex flex-col justify-center">

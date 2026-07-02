@@ -154,3 +154,14 @@ describe("clamp and boundary behavior", () => {
     expect(Math.abs(sportOnly.health - financeOnly.health)).toBeGreaterThan(1);
   });
 });
+
+describe("shock invariance", () => {
+  it("zero shocks reproduce the deterministic season exactly", () => {
+    for (const key of Object.keys(PRESETS) as (keyof typeof PRESETS)[]) {
+      const inputs = balanced(PRESETS[key]);
+      expect(runSeason(inputs, { ppg: 0, conversion: 0 })).toEqual(
+        runSeason(inputs),
+      );
+    }
+  });
+});

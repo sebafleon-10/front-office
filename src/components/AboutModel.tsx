@@ -159,11 +159,14 @@ export function AboutModel() {
             How every number is built
           </CardTitle>
           <p className="mt-3 text-[14px] leading-relaxed text-[var(--color-text-muted)]">
-            Nothing here is random. One deterministic engine takes your eight
+            Nothing here is hidden. One deterministic engine takes your eight
             decisions and walks a fixed causal chain from spend to squad to
-            table to books. Every figure below traces back to the same formulas
-            that drive the panels above — move a lever and watch the whole chain
-            re-settle.
+            table to books — the same plan always produces the same season.
+            The only luck in the product lives in Run the season, which
+            replays this exact engine under seeded noise on form and turnout,
+            rivals held fixed, to show the spread around your plan. Every
+            figure below traces back to the same formulas that drive the
+            panels above — move a lever and watch the whole chain re-settle.
           </p>
         </header>
 

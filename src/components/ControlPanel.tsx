@@ -26,6 +26,7 @@ interface ControlPanelProps {
   onChange: <K extends keyof ControlState>(key: K, value: ControlState[K]) => void;
   onPick: (key: PresetKey) => void;
   onReset: () => void;
+  onRun?: () => void;
 }
 
 const formatPrice = (n: number) => `$${n}`;
@@ -38,6 +39,7 @@ export function ControlPanel({
   onChange,
   onPick,
   onReset,
+  onRun,
 }: ControlPanelProps) {
   return (
     <Card>
@@ -81,7 +83,7 @@ export function ControlPanel({
             onChange={(v) => onChange("academy", v)}
           />
           <Slider
-            label="Marketing"
+            label="Marketing & community"
             value={state.marketing}
             min={INPUT_RANGES.marketing.min}
             max={INPUT_RANGES.marketing.max}
@@ -92,7 +94,7 @@ export function ControlPanel({
             onChange={(v) => onChange("marketing", v)}
           />
           <Slider
-            label="Facilities"
+            label="Matchday & facilities"
             value={state.facilities}
             min={INPUT_RANGES.facilities.min}
             max={INPUT_RANGES.facilities.max}
@@ -103,7 +105,7 @@ export function ControlPanel({
             onChange={(v) => onChange("facilities", v)}
           />
           <Slider
-            label="Commercial team"
+            label="Sponsorship sales"
             value={state.commercial}
             min={INPUT_RANGES.commercial.min}
             max={INPUT_RANGES.commercial.max}
@@ -136,6 +138,24 @@ export function ControlPanel({
         <div className="fo-divider" aria-hidden />
 
         <BudgetMeter controllable={controllable} overBudget={overBudget} />
+
+        {onRun && (
+          <>
+            <div className="fo-divider" aria-hidden />
+            <div className="flex flex-col gap-2">
+              <button
+                type="button"
+                onClick={onRun}
+                className="fo-btn-primary w-full px-4 py-3 text-[14px]"
+              >
+                Run the season
+              </button>
+              <p className="text-center text-[11px] text-[var(--color-text-subtle)]">
+                Plays this plan through 1,000 seasons of luck
+              </p>
+            </div>
+          </>
+        )}
       </div>
     </Card>
   );

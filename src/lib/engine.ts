@@ -64,6 +64,20 @@ export interface SeasonInputs {
   weightFinance: number;
 }
 
+/**
+ * One season's luck. Zero shocks (the default) reproduce the deterministic
+ * engine bit-for-bit; the Monte Carlo layer in simulate.ts draws these from
+ * seeded normals.
+ */
+export interface SeasonShocks {
+  /** Additive shock to points per game, applied inside the ppg clamp. */
+  ppg: number;
+  /** Multiplicative shock to attendance conversion (0.05 = +5%), applied inside the conversion clamp. */
+  conversion: number;
+}
+
+const NO_SHOCKS: SeasonShocks = { ppg: 0, conversion: 0 };
+
 export interface LeagueRow {
   name: string;
   points: number;
@@ -134,7 +148,10 @@ export function buildLeagueTable(yourPoints: number): LeagueRow[] {
   return rows;
 }
 
-export function runSeason(inputs: SeasonInputs): SeasonResult {
+export function runSeason(
+  inputs: SeasonInputs,
+  shocks: SeasonShocks = NO_SHOCKS,
+): SeasonResult {
   const {
     wages,
     academy,
@@ -162,7 +179,7 @@ export function runSeason(inputs: SeasonInputs): SeasonResult {
   );
 
   const ppg = clamp(
-    BASE_PPG + (quality - AVG_QUALITY) * PPG_PER_QUALITY,
+    BASE_PPG + (quality - AVG_QUALITY) * PPG_PER_QUALITY + shocks.ppg,
     MIN_PPG,
     MAX_PPG,
   );
@@ -199,7 +216,8 @@ export function runSeason(inputs: SeasonInputs): SeasonResult {
     BASE_CONVERSION *
       (1 + facilitiesLift) *
       priceFactor *
-      (1 + formLift),
+      (1 + formLift) *
+      (1 + shocks.conversion),
     MIN_CONVERSION,
     MAX_CONVERSION,
   );

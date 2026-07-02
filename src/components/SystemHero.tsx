@@ -354,9 +354,9 @@ export function SystemHero({
             Live causal model
           </p>
           <h1 className="fo-tight mt-3 text-[30px] font-semibold leading-[1.05] text-[var(--color-text)] sm:text-[40px] lg:text-[46px]">
-            See the season
+            Before you spend a dollar,
             <br />
-            before you run it.
+            see how the club works.
           </h1>
           <p className="mt-3 max-w-[560px] text-[14px] leading-relaxed text-[var(--color-text-muted)] sm:text-[15px]">
             Drag any blue decision. Squad quality, the league table, the crowd,

@@ -20,7 +20,7 @@ const SITE_URL =
       : "http://localhost:3000");
 const TITLE = "Front Office — run the club";
 const DESCRIPTION =
-  "An interactive business simulation for running a lower league soccer club for one season. Set six decisions and watch the league finish and full season finances respond live.";
+  "You run Meridian FC now: $1.2M, one season, six decisions. A business simulation of lower league soccer club economics — draft a plan, run it through 1,000 seasons of luck, and hear the board's verdict.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),

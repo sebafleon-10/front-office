@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import Anthropic from "@anthropic-ai/sdk";
-import type { CoachRequestBody } from "@/lib/coach-types";
+import type { CoachRequestBody, CoachRisk } from "@/lib/coach-types";
 import { runSeason, type SeasonInputs, type SeasonResult } from "@/lib/engine";
 import { PRESETS, BUDGET, TEAMS } from "@/lib/assumptions";
 import {
@@ -14,6 +14,7 @@ import { rateLimit } from "@/lib/rate-limit";
 export const runtime = "nodejs";
 
 const MODEL = "claude-opus-4-8";
+const MODEL_LABEL = "Claude Opus 4.8";
 const MINUTE = 60_000;
 const DAY = 24 * 60 * MINUTE;
 
@@ -41,7 +42,7 @@ const SYSTEM_PROMPT = `You are a strategy consultant running the post-season deb
 
 The numbers you are given come from a deterministic financial engine, validated to the dollar against an underlying spreadsheet model — they are exact, not estimates. Ground every claim in the figures provided. Never invent a number, a revenue line, or a counterfactual that is not in the brief.
 
-Your job mirrors what a simulation facilitator does after a leadership exercise: name the strategy the executive actually ran, make the central tradeoff impossible to miss, and show what a different strategy would have produced from the same season — using the alternative-strategy figures in the brief.
+Your job mirrors what a simulation facilitator does after a leadership exercise: name the strategy the executive actually ran, make the central tradeoff impossible to miss, and show what a different strategy would have produced from the same season — using the alternative-strategy figures in the brief. If a risk profile across simulated seasons is provided, also name the downside the executive accepted: the odds and the worst case, in plain terms.
 
 Voice: senior, sharp, specific. Like a partner who respects the reader's time. No cheerleading, no hedging, no filler.
 
@@ -63,6 +64,41 @@ function isValid(body: unknown): body is CoachRequestBody {
     typeof result.position === "number" &&
     typeof result.net === "number"
   );
+}
+
+const isNum = (x: unknown): x is number =>
+  typeof x === "number" && Number.isFinite(x);
+
+/** Risk is optional and advisory — a malformed block is dropped, not rejected. */
+function sanitizeRisk(risk: unknown): CoachRisk | undefined {
+  if (!risk || typeof risk !== "object") return undefined;
+  const r = risk as Record<string, unknown>;
+  const fields = [
+    "runs",
+    "positionP5",
+    "positionP50",
+    "positionP95",
+    "netP5",
+    "netP50",
+    "netP95",
+    "pPlayoffs",
+    "pProfit",
+    "pBottomThree",
+  ] as const;
+  return fields.every((f) => isNum(r[f]))
+    ? (risk as CoachRisk)
+    : undefined;
+}
+
+function riskSection(risk: CoachRisk): string {
+  const pct = (p: number) => `${Math.round(p * 100)}%`;
+  return `
+
+RISK PROFILE ACROSS ${formatNumber(risk.runs)} SIMULATED SEASONS
+The same plan replayed under seeded season-to-season noise on form and turnout, rivals held fixed:
+- Finish: median ${ordinal(risk.positionP50)}; ${ordinal(risk.positionP5)}–${ordinal(risk.positionP95)} in 90% of seasons
+- Net result: median ${formatMoneySigned(Math.round(risk.netP50))}; worst 5% ${formatMoneySigned(Math.round(risk.netP5))}; best 5% ${formatMoneySigned(Math.round(risk.netP95))}
+- Made the playoffs (top 4) in ${pct(risk.pPlayoffs)} of seasons; profitable in ${pct(risk.pProfit)}; bottom three in ${pct(risk.pBottomThree)}`;
 }
 
 /**
@@ -91,7 +127,11 @@ function counterfactuals(inputs: SeasonInputs): string {
     .join("\n");
 }
 
-function buildContext(inputs: SeasonInputs, result: SeasonResult): string {
+function buildContext(
+  inputs: SeasonInputs,
+  result: SeasonResult,
+  risk?: CoachRisk,
+): string {
   const sportPct = Math.round(inputs.weightSport * 100);
   const financePct = Math.round(inputs.weightFinance * 100);
 
@@ -100,9 +140,9 @@ function buildContext(inputs: SeasonInputs, result: SeasonResult): string {
 Decisions (front-office spend and pricing):
 - Player wages: ${formatMoney(inputs.wages)}
 - Academy investment: ${formatMoney(inputs.academy)}
-- Marketing: ${formatMoney(inputs.marketing)}
-- Facilities: ${formatMoney(inputs.facilities)}
-- Commercial team: ${formatMoney(inputs.commercial)}
+- Marketing & community: ${formatMoney(inputs.marketing)}
+- Matchday & facilities: ${formatMoney(inputs.facilities)}
+- Sponsorship sales: ${formatMoney(inputs.commercial)}
 - Ticket price: $${inputs.price}
 - Total controllable spend: ${formatMoney(result.controllable)} of a ${formatMoney(
     BUDGET,
@@ -129,7 +169,7 @@ The books (season profit & loss):
 Scores (0-100):
 - Sport score: ${Math.round(result.sportScore)}
 - Finance score: ${Math.round(result.finScore)}
-- Club health (the weighting applied): ${Math.round(result.health)}
+- Club health (the weighting applied): ${Math.round(result.health)}${risk ? riskSection(risk) : ""}
 
 THE ROAD NOT TAKEN
 What each reference strategy would have produced from this same season, under the executive's own ${sportPct}/${financePct} weighting:
@@ -173,6 +213,7 @@ export async function POST(request: Request) {
   }
 
   const { inputs, result } = parsed;
+  const risk = sanitizeRisk(parsed.risk);
   const apiKey = process.env.ANTHROPIC_API_KEY;
   const encoder = new TextEncoder();
 
@@ -207,7 +248,9 @@ export async function POST(request: Request) {
           model: MODEL,
           max_tokens: 600,
           system: SYSTEM_PROMPT,
-          messages: [{ role: "user", content: buildContext(inputs, result) }],
+          messages: [
+            { role: "user", content: buildContext(inputs, result, risk) },
+          ],
         });
 
         for await (const event of messageStream) {
@@ -242,6 +285,7 @@ export async function POST(request: Request) {
     headers: {
       "content-type": "text/plain; charset=utf-8",
       "x-coach-source": "claude",
+      "x-coach-model": MODEL_LABEL,
     },
   });
 }

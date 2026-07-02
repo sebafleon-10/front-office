@@ -96,6 +96,54 @@
     }
   }
 
+  /* Hero entrance runs in pure CSS so content is visible at first paint,
+     before hydration. Without the no-preference match nothing animates and
+     everything renders fully visible. */
+  @media (prefers-reduced-motion: no-preference) {
+    .hero-enter {
+      animation: fo-hero-rise 0.55s cubic-bezier(0.32, 0.72, 0, 1) both;
+    }
+
+    .hero-enter-shot {
+      animation: fo-hero-scale 0.65s cubic-bezier(0.32, 0.72, 0, 1) both;
+    }
+
+    .hero-enter-late {
+      animation: fo-hero-fade 0.28s cubic-bezier(0.32, 0.72, 0, 1) 0.4s both;
+    }
+  }
+
+  @keyframes fo-hero-rise {
+    from {
+      opacity: 0;
+      transform: translateY(8px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes fo-hero-scale {
+    from {
+      opacity: 0;
+      transform: scale(0.985);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  @keyframes fo-hero-fade {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
   .fo-card {
     background: var(--color-surface-1);
     border: 1px solid var(--color-hairline);

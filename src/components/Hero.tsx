@@ -1,46 +1,26 @@
 "use client";
 
 import Image from "next/image";
-import { motion, useReducedMotion, type Variants } from "framer-motion";
 import { useCallback } from "react";
 
 const SECTION_ID = "interactive-model";
 
+/* Entrance animation is pure CSS (see .hero-enter* in globals.css) so the
+   hero is visible at first paint instead of waiting for hydration. */
 export function Hero() {
-  const reduce = useReducedMotion();
-
   const handleEnter = useCallback(() => {
     const el = document.getElementById(SECTION_ID);
     if (!el) return;
+    const reduce = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
     el.scrollIntoView({
       behavior: reduce ? "auto" : "smooth",
       block: "start",
     });
-  }, [reduce]);
+  }, []);
 
-  const spring = reduce
-    ? { duration: 0.18 }
-    : { type: "spring" as const, stiffness: 220, damping: 28, mass: 1 };
-
-  const containerVariants: Variants = {
-    hidden: {},
-    visible: {
-      transition: {
-        staggerChildren: reduce ? 0 : 0.04,
-        delayChildren: reduce ? 0 : 0.05,
-      },
-    },
-  };
-
-  const itemVariants: Variants = {
-    hidden: { opacity: 0, y: reduce ? 0 : 8 },
-    visible: { opacity: 1, y: 0, transition: spring },
-  };
-
-  const shotVariants: Variants = {
-    hidden: { opacity: 0, scale: reduce ? 1 : 0.985 },
-    visible: { opacity: 1, scale: 1, transition: spring },
-  };
+  const stagger = (i: number) => ({ animationDelay: `${0.05 + i * 0.04}s` });
 
   return (
     <section
@@ -59,38 +39,34 @@ export function Hero() {
       </div>
 
       <div className="relative mx-auto flex w-full max-w-[1440px] flex-1 flex-col items-center px-6 pt-12 pb-16 sm:px-10 sm:pt-20 sm:pb-24">
-        <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          animate="visible"
-          className="grid w-full flex-1 grid-cols-1 items-center gap-12 lg:grid-cols-[minmax(0,5fr)_minmax(0,6fr)] lg:gap-16"
-        >
+        <div className="grid w-full flex-1 grid-cols-1 items-center gap-12 lg:grid-cols-[minmax(0,5fr)_minmax(0,6fr)] lg:gap-16">
           <div className="flex flex-col gap-6">
-            <motion.p
-              variants={itemVariants}
-              className="text-[12px] font-medium text-[var(--color-text-subtle)]"
+            <p
+              className="hero-enter text-[12px] font-medium text-[var(--color-text-subtle)]"
+              style={stagger(0)}
             >
-              Lower league club simulation
-            </motion.p>
+              You&rsquo;ve just been named General Manager of Meridian FC
+            </p>
 
-            <motion.h1
-              variants={itemVariants}
-              className="fo-tight text-[40px] font-semibold leading-[1.04] text-[var(--color-text)] sm:text-[56px] lg:text-[64px] xl:text-[72px]"
+            <h1
+              className="hero-enter fo-tight text-[40px] font-semibold leading-[1.04] text-[var(--color-text)] sm:text-[56px] lg:text-[64px] xl:text-[72px]"
+              style={stagger(1)}
             >
               Climb the table.
               <br />
               Turn a profit.
-            </motion.h1>
+            </h1>
 
-            <motion.p
-              variants={itemVariants}
-              className="max-w-[520px] text-[15px] leading-relaxed text-[var(--color-text-muted)] sm:text-[17px]"
+            <p
+              className="hero-enter max-w-[520px] text-[15px] leading-relaxed text-[var(--color-text-muted)] sm:text-[17px]"
+              style={stagger(2)}
             >
-              Run a lower league club for a single season. Set six decisions,
-              then see where you finish and what it cost.
-            </motion.p>
+              The board hands you $1.2M and one season. Six decisions decide
+              where you finish and whether the books survive it — and the
+              board is watching both.
+            </p>
 
-            <motion.div variants={itemVariants} className="mt-2">
+            <div className="hero-enter mt-2" style={stagger(3)}>
               <button
                 type="button"
                 onClick={handleEnter}
@@ -98,12 +74,12 @@ export function Hero() {
               >
                 See how it works
               </button>
-            </motion.div>
+            </div>
           </div>
 
-          <motion.div
-            variants={shotVariants}
-            className="relative flex justify-center lg:justify-end"
+          <div
+            className="hero-enter-shot relative flex justify-center lg:justify-end"
+            style={stagger(2)}
           >
             <div
               aria-hidden
@@ -130,20 +106,13 @@ export function Hero() {
                 className="block h-auto w-full"
               />
             </div>
-          </motion.div>
-        </motion.div>
+          </div>
+        </div>
 
-        <motion.button
+        <button
           type="button"
           onClick={handleEnter}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={
-            reduce
-              ? { duration: 0.18 }
-              : { duration: 0.28, delay: 0.4, ease: [0.32, 0.72, 0, 1] }
-          }
-          className="mt-12 inline-flex items-center gap-2 text-[12px] text-[var(--color-text-subtle)] transition-colors hover:text-[var(--color-text-muted)]"
+          className="hero-enter-late mt-12 inline-flex items-center gap-2 text-[12px] text-[var(--color-text-subtle)] transition-colors hover:text-[var(--color-text-muted)]"
           aria-label="Scroll to the interactive model"
         >
           More below
@@ -162,7 +131,7 @@ export function Hero() {
               strokeLinejoin="round"
             />
           </svg>
-        </motion.button>
+        </button>
       </div>
     </section>
   );

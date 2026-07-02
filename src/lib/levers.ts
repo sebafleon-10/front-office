@@ -57,7 +57,7 @@ export const LEVERS: LeverMeta[] = [
   },
   {
     key: "marketing",
-    label: "Marketing",
+    label: "Marketing & community",
     short: "Marketing",
     min: INPUT_RANGES.marketing.min,
     max: INPUT_RANGES.marketing.max,
@@ -71,7 +71,7 @@ export const LEVERS: LeverMeta[] = [
   },
   {
     key: "facilities",
-    label: "Facilities",
+    label: "Matchday & facilities",
     short: "Facilities",
     min: INPUT_RANGES.facilities.min,
     max: INPUT_RANGES.facilities.max,
@@ -85,7 +85,7 @@ export const LEVERS: LeverMeta[] = [
   },
   {
     key: "commercial",
-    label: "Commercial team",
+    label: "Sponsorship sales",
     short: "Commercial",
     min: INPUT_RANGES.commercial.min,
     max: INPUT_RANGES.commercial.max,

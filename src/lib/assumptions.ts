@@ -62,6 +62,31 @@ export const MERCH_FORM_FLOOR = 0.8;
 
 export const FIN_SCORE_SCALE = 500_000;
 
+/*
+ * Monte Carlo layer ("Run the season").
+ *
+ * PPG_SD — a single game pays 0, 1 or 3 points. For a mid-table side
+ * (roughly 36% wins, 27% draws at the league-average 1.35 ppg) one game's
+ * points carry a standard deviation of about 1.3, so the season-average
+ * ppg noise over 14 independent games is 1.3 / √14 ≈ 0.35. We shade that
+ * to 0.30 because part of real scorelines is explained by the quality gap
+ * already priced into the deterministic mean.
+ *
+ * CONVERSION_SD — season-average turnout swings with weather, kickoff
+ * times and the fixture draw; ±10% across a season at two sigma gives a
+ * multiplicative sd of 0.05.
+ *
+ * Rivals' points stay fixed across runs: the distribution shows YOUR
+ * variance, not theirs (documented in About the model).
+ *
+ * Zero shocks reproduce the deterministic engine exactly — a gold test
+ * pins that invariance.
+ */
+export const PPG_SD = 0.3;
+export const CONVERSION_SD = 0.05;
+export const MC_RUNS = 1000;
+export const MC_SEED = 0x5eba11;
+
 export const RIVAL_POINTS: readonly number[] = [
   31, 28, 26, 23, 21, 19, 17, 15, 13, 11, 9,
 ];
@@ -80,7 +105,7 @@ export const RIVAL_NAMES: readonly string[] = [
   "Junction City",
 ];
 
-export const YOUR_CLUB_NAME = "Your Club";
+export const YOUR_CLUB_NAME = "Meridian FC";
 
 export const INPUT_RANGES = {
   wages: { min: 0, max: 1_200_000, step: 5_000 },
