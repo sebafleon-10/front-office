@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { Card, CardEyebrow, CardTitle } from "./Card";
 import {
   formatCompactMoney,
@@ -16,6 +16,8 @@ interface SeasonRunPanelProps {
   onRun: () => void;
   /** Changes with every run so the reveal re-plays. */
   runId: number;
+  /** Secondary actions (pin, copy link, board pack) shown after a run. */
+  actions?: React.ReactNode;
 }
 
 const EASE = [0.32, 0.72, 0, 1] as const;
@@ -29,6 +31,7 @@ export function SeasonRunPanel({
   stale,
   onRun,
   runId,
+  actions,
 }: SeasonRunPanelProps) {
   const reduce = useReducedMotion();
 
@@ -48,13 +51,13 @@ export function SeasonRunPanel({
         </button>
       </header>
 
-      <AnimatePresence mode="wait" initial={false}>
-        {summary ? (
+      {/* Plain conditional render — AnimatePresence mode="wait" freezes if the
+          tab is hidden mid-transition (rAF pauses), leaving the panel stuck. */}
+      {summary ? (
           <motion.div
             key={`run-${runId}`}
-            initial={{ opacity: 0 }}
+            initial={reduce ? false : { opacity: 0 }}
             animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
             transition={{ duration: reduce ? 0.01 : 0.2, ease: EASE }}
             className={stale ? "opacity-60 transition-opacity" : ""}
           >
@@ -99,30 +102,30 @@ export function SeasonRunPanel({
               <NetHistogram summary={summary} reduce={!!reduce} />
             </div>
 
-            <p className="mt-5 text-[12px] leading-relaxed text-[var(--color-text-subtle)]">
-              {summary.runs.toLocaleString("en-US")} seasons of the same plan,
-              different luck — seeded noise on form and turnout over the exact
-              deterministic engine. Rivals&rsquo; totals stay fixed: this is
-              your variance, not theirs.
-            </p>
+            <div className="mt-5 flex flex-wrap items-center justify-between gap-3">
+              <p className="text-[12px] leading-relaxed text-[var(--color-text-subtle)]">
+                {summary.runs.toLocaleString("en-US")} seasons of the same
+                plan, different luck — seeded noise on form and turnout over
+                the exact deterministic engine. Rivals&rsquo; totals stay
+                fixed: this is your variance, not theirs.
+              </p>
+              {actions && (
+                <div className="flex flex-none flex-wrap items-center gap-2">
+                  {actions}
+                </div>
+              )}
+            </div>
           </motion.div>
         ) : (
-          <motion.p
-            key="invite"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="text-[14px] leading-relaxed text-[var(--color-text-muted)]"
-          >
+          <p className="text-[14px] leading-relaxed text-[var(--color-text-muted)]">
             The dashboard above is your plan on paper — the season an average
             run of luck produces. Football is not played on paper. Run this
             plan through 1,000 simulated seasons of form and turnout swings
             and see the range you actually signed up for: the playoff odds,
             the chance the books close in the black, and the downside the
             board should hear about first.
-          </motion.p>
+          </p>
         )}
-      </AnimatePresence>
     </Card>
   );
 }

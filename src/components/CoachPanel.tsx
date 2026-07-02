@@ -13,6 +13,8 @@ interface CoachPanelProps {
   risk?: CoachRisk | null;
   /** Increment to request an automatic generate (fired after a season run). */
   autoGenerate?: number;
+  /** Reports the finished debrief text and the inputs key it was written for. */
+  onDebrief?: (text: string, key: string) => void;
 }
 
 type Source = "claude" | "fallback" | null;
@@ -22,6 +24,7 @@ export function CoachPanel({
   result,
   risk,
   autoGenerate = 0,
+  onDebrief,
 }: CoachPanelProps) {
   const [debrief, setDebrief] = useState<string>("");
   const [source, setSource] = useState<Source>(null);
@@ -64,6 +67,7 @@ export function CoachPanel({
       acc += decoder.decode();
       setDebrief(acc);
       if (!acc.trim()) throw new Error("The debrief came back empty.");
+      onDebrief?.(acc, key);
     } catch (e) {
       setError(
         e instanceof Error ? e.message : "Could not generate the debrief.",
