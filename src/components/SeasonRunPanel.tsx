@@ -104,7 +104,7 @@ export function SeasonRunPanel({
 
             <div className="mt-5 flex flex-wrap items-center justify-between gap-3">
               <p className="text-[12px] leading-relaxed text-[var(--color-text-subtle)]">
-                {summary.runs.toLocaleString("en-US")} seasons of the same
+                {summary.runs.toLocaleString("en-US")}{" "}seasons of the same
                 plan, different luck — seeded noise on form and turnout over
                 the exact deterministic engine. Rivals&rsquo; totals stay
                 fixed: this is your variance, not theirs.

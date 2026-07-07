@@ -193,7 +193,7 @@ function buildFallbackBrief(inputs: SeasonInputs, result: SeasonResult): string 
   return [
     `You finished ${ordinal(result.position)} in a ${TEAMS}-team table with ${result.points} points and a net result of ${formatMoneySigned(result.net)}.`,
     `Wages absorbed ${wageShare}% of the ${formatMoney(result.controllable)} you put through the front office, and you ran ${priceNote} at $${inputs.price}. Sponsorship landed at ${formatMoney(result.sponsorship)} and player trading delivered ${formatMoney(result.playerSales)}.`,
-    `The story of the year is the tradeoff between table finish and cash on hand — the lesson the board will want to talk through next. Set an API key to have Claude write a fuller debrief.`,
+    `The story of the year is the tradeoff between table finish and cash on hand — the lesson the board will want to talk through next. This is the sample memo; the live coach also weighs the strategies you didn't pick and the risk profile of the one you did.`,
   ].join("\n\n");
 }
 
