@@ -105,10 +105,10 @@ export function SeasonRunPanel({
             <div className="mt-5 flex flex-wrap items-center justify-between gap-3">
               <p className="text-[12px] leading-relaxed text-[var(--color-text-subtle)]">
                 {summary.runs.toLocaleString("en-US")}{" "}seasons of the same
-                plan, different luck — seeded noise on form and turnout over
-                the exact deterministic engine, for your club and every rival
-                alike. The dashboard above is the league at par; here the
-                whole table breathes.
+                plan, different luck — seeded noise on form (the week-to-week
+                swing in results) and turnout, over the exact deterministic
+                engine, for your club and every rival alike. The dashboard
+                above is the league at par; here the whole table breathes.
               </p>
               {actions && (
                 <div className="flex flex-none flex-wrap items-center gap-2">
@@ -121,10 +121,11 @@ export function SeasonRunPanel({
           <p className="text-[14px] leading-relaxed text-[var(--color-text-muted)]">
             The dashboard above is your plan on paper — the season an average
             run of luck produces. Football is not played on paper. Run this
-            plan through 1,000 simulated seasons of form and turnout swings
-            and see the range you actually signed up for: the playoff odds,
-            the chance the books close in the black, and the downside the
-            board should hear about first.
+            plan through 1,000 simulated seasons of swings in form (the
+            week-to-week luck of results) and turnout, and see the range you
+            actually signed up for: the playoff odds, the chance the books
+            close in the black, and the downside the board should hear about
+            first.
           </p>
         )}
     </Card>

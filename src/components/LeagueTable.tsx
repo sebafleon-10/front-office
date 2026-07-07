@@ -58,8 +58,20 @@ export function LeagueTable({ rows }: LeagueTableProps) {
                   {row.points}
                 </span>
               </div>
-              {index < rows.length - 1 && (
-                <div className="fo-divider mx-2" aria-hidden />
+              {index === 3 ? (
+                <div className="mx-2 flex items-center gap-2 py-[2px]">
+                  <div
+                    className="h-px flex-1 bg-[var(--color-accent-muted)]"
+                    aria-hidden
+                  />
+                  <span className="flex-none text-[10px] uppercase tracking-[0.08em] text-[var(--color-text-subtle)]">
+                    Playoff line · top four make it
+                  </span>
+                </div>
+              ) : (
+                index < rows.length - 1 && (
+                  <div className="fo-divider mx-2" aria-hidden />
+                )
               )}
             </motion.li>
           ))}

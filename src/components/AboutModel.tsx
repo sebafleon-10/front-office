@@ -58,6 +58,7 @@ const LEVER_ITEMS: {
   name: string;
   par: string;
   feeds: string;
+  plain: string;
   rule: string;
   example: string;
 }[] = [
@@ -68,6 +69,7 @@ const LEVER_ITEMS: {
         ? `Par $${l.par}`
         : `Par ${formatCompactMoney(l.par)}`,
     feeds: l.feeds,
+    plain: l.plain,
     rule: l.rule,
     example: l.example,
   })),
@@ -75,9 +77,11 @@ const LEVER_ITEMS: {
     name: "Sport vs finance weighting",
     par: "Health only",
     feeds: "Club health score",
-    rule: "Health = weight_sport × sport score + weight_finance × finance score. It touches nothing in the table or the books — only the headline number.",
+    plain:
+      "Your definition of success. It touches nothing in the table or the books — only how the one headline number is blended.",
+    rule: "Health = weight_sport × sport score + weight_finance × finance score.",
     example:
-      "It is your definition of success. Slide it to 100% sport and a profitable mid-table season scores worse than a trophy that lost money.",
+      "Slide it to 100% sport and a profitable mid-table season scores worse than a trophy that lost money.",
   },
 ];
 
@@ -257,6 +261,9 @@ export function AboutModel() {
                   Feeds {l.feeds}
                 </span>
                 <p className="mt-3 text-[13px] leading-relaxed text-[var(--color-text-muted)]">
+                  {l.plain}
+                </p>
+                <p className="fo-tnum mt-2 text-[12px] leading-relaxed text-[var(--color-text-subtle)]">
                   {l.rule}
                 </p>
                 <p className="mt-2 text-[13px] leading-relaxed text-[var(--color-text-subtle)]">

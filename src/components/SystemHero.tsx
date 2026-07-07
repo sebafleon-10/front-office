@@ -82,31 +82,42 @@ const inputValue = (key: LeverKey, v: number) =>
 
 const DERIVED_DETAIL: Record<
   "quality" | "position" | "fanbase" | "attendance" | "net" | "health",
-  { label: string; detail: string }
+  { label: string; plain: string; formula: string }
 > = {
   quality: {
     label: "Squad quality",
-    detail: "quality = 50 × √(wages ÷ par) + academy bump, capped at 92",
+    plain:
+      "How good the team is, 0–92, league average 50 — bought mostly with wages, topped up by the academy.",
+    formula: "quality = 50 × √(wages ÷ par) + academy bump, capped at 92",
   },
   position: {
     label: "League position",
-    detail: "points = round(ppg × 14), ranked against the 11-rival par ladder",
+    plain:
+      "Where you finish among 12 clubs — the top four make the playoffs.",
+    formula: "points = round(ppg × 14), ranked against the 11-rival par ladder",
   },
   fanbase: {
     label: "Fanbase",
-    detail: "8,000 base, lifted by marketing spend and on-pitch success",
+    plain:
+      "Everyone who cares about the club — grown by marketing and by winning.",
+    formula: "8,000 base, lifted by marketing spend and on-pitch success",
   },
   attendance: {
     label: "Attendance",
-    detail: "fanbase × conversion (facilities, price, form), capped at 6,000",
+    plain: "How many actually come through the gate on matchday.",
+    formula:
+      "fanbase × conversion (facilities, price, form), capped at 6,000 seats",
   },
   net: {
     label: "Net result",
-    detail: "every revenue line minus every cost line — the bottom of the P&L",
+    plain: "The season's profit or loss — what the board reads first.",
+    formula: "every revenue line minus every cost line — the bottom of the P&L",
   },
   health: {
     label: "Club health",
-    detail: "weight_sport × sport score + weight_finance × finance score",
+    plain:
+      "One number for the whole season, blended by how you weighted sport against finance.",
+    formula: "weight_sport × sport score + weight_finance × finance score",
   },
 };
 
@@ -280,12 +291,13 @@ export function SystemHero({
       return {
         label: lever.label,
         value: inputValue(lever.key, values[lever.key]),
-        detail: lever.rule,
+        plain: lever.plain,
+        formula: lever.rule,
       };
     }
     if (active in DERIVED_DETAIL) {
       const d = DERIVED_DETAIL[active as keyof typeof DERIVED_DETAIL];
-      return { label: d.label, value: null, detail: d.detail };
+      return { label: d.label, value: null, plain: d.plain, formula: d.formula };
     }
     return null;
   }, [active, values]);
@@ -657,14 +669,20 @@ export function SystemHero({
                 )}
               </div>
               <div className="h-8 w-px flex-none bg-[var(--color-hairline)]" />
-              <p className="text-[13px] leading-relaxed text-[var(--color-text-muted)]">
-                {activeDetail.detail}
-              </p>
+              <div className="flex flex-col gap-[2px]">
+                <p className="text-[13px] leading-relaxed text-[var(--color-text-muted)]">
+                  {activeDetail.plain}
+                </p>
+                <p className="fo-tnum text-[12px] leading-relaxed text-[var(--color-text-subtle)]">
+                  {activeDetail.formula}
+                </p>
+              </div>
             </>
           ) : (
             <p className="text-[13px] leading-relaxed text-[var(--color-text-subtle)]">
-              Hover or focus any node to see the formula behind it. Drag a blue
-              input and watch the whole chain re-settle.
+              Hover or focus any node to see what drives it — plain English
+              first, formula included. Drag a blue input and watch the whole
+              chain re-settle.
             </p>
           )}
         </motion.div>
