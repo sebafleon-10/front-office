@@ -1,5 +1,7 @@
 "use client";
 
+import { useEffect, useRef, useState } from "react";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { AnimatedNumber } from "./AnimatedNumber";
 import { Card, CardEyebrow } from "./Card";
 import { HealthGauge } from "./HealthGauge";
@@ -13,6 +15,73 @@ interface OutcomeDashboardProps {
   risk?: MonteCarloSummary | null;
 }
 
+interface OutcomeDeltas {
+  position: number;
+  net: number;
+  health: number;
+}
+
+const DELTA_SETTLE_MS = 1500;
+
+/**
+ * Deltas against the last settled outcome. While the user drags, changes
+ * accumulate against the anchor taken before they started moving; once the
+ * numbers hold still for a beat, the anchor re-bases and the chips fade.
+ * Works for slider drags, presets and shared-URL loads alike — no wiring
+ * to the controls needed.
+ */
+function useOutcomeDeltas(result: SeasonResult): OutcomeDeltas | null {
+  const { position, net, health } = result;
+  const anchor = useRef({ position, net, health });
+  const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const [deltas, setDeltas] = useState<OutcomeDeltas | null>(null);
+
+  useEffect(() => {
+    const a = anchor.current;
+    const d = {
+      position: position - a.position,
+      net: net - a.net,
+      health: health - a.health,
+    };
+    if (d.position === 0 && Math.abs(d.net) < 0.5 && Math.abs(d.health) < 0.5)
+      return;
+    setDeltas(d);
+    if (timer.current) clearTimeout(timer.current);
+    timer.current = setTimeout(() => {
+      anchor.current = { position, net, health };
+      setDeltas(null);
+    }, DELTA_SETTLE_MS);
+  }, [position, net, health]);
+
+  useEffect(
+    () => () => {
+      if (timer.current) clearTimeout(timer.current);
+    },
+    [],
+  );
+
+  return deltas;
+}
+
+function DeltaChip({ text, good }: { text: string; good: boolean }) {
+  const reduce = useReducedMotion();
+  return (
+    <motion.span
+      initial={{ opacity: 0, y: reduce ? 0 : 4 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: reduce ? 0 : -4 }}
+      transition={{ duration: reduce ? 0.01 : 0.18 }}
+      className={`fo-tnum flex-none rounded-full border px-2 py-[2px] text-[11px] font-medium ${
+        good
+          ? "border-[rgba(63,210,126,0.35)] text-[var(--color-profit)]"
+          : "border-[rgba(255,123,123,0.35)] text-[var(--color-loss)]"
+      }`}
+    >
+      {text}
+    </motion.span>
+  );
+}
+
 export function OutcomeDashboard({ result, risk }: OutcomeDashboardProps) {
   const netPositive = result.net >= 0;
   const netColor = netPositive
@@ -22,6 +91,11 @@ export function OutcomeDashboard({ result, risk }: OutcomeDashboardProps) {
     ? "Cash kept after a full season of operations"
     : "Cash burned across a full season of operations";
 
+  const deltas = useOutcomeDeltas(result);
+  const places = deltas ? Math.abs(deltas.position) : 0;
+  const netDelta = deltas ? Math.round(deltas.net) : 0;
+  const healthDelta = deltas ? Math.round(deltas.health) : 0;
+
   return (
     <div
       className="grid gap-6"
@@ -30,7 +104,17 @@ export function OutcomeDashboard({ result, risk }: OutcomeDashboardProps) {
       }}
     >
       <Card className="flex flex-col justify-center">
-        <CardEyebrow>Final league position</CardEyebrow>
+        <div className="flex items-center justify-between gap-2">
+          <CardEyebrow>Final league position</CardEyebrow>
+          <AnimatePresence>
+            {deltas && deltas.position !== 0 && (
+              <DeltaChip
+                text={`${deltas.position < 0 ? "▲" : "▼"} ${places} ${places === 1 ? "place" : "places"}`}
+                good={deltas.position < 0}
+              />
+            )}
+          </AnimatePresence>
+        </div>
         <div className="mt-4 flex items-baseline gap-3">
           <AnimatedNumber
             value={result.position}
@@ -51,7 +135,17 @@ export function OutcomeDashboard({ result, risk }: OutcomeDashboardProps) {
       </Card>
 
       <Card className="flex flex-col justify-center">
-        <CardEyebrow>Net result for the season</CardEyebrow>
+        <div className="flex items-center justify-between gap-2">
+          <CardEyebrow>Net result for the season</CardEyebrow>
+          <AnimatePresence>
+            {deltas && Math.abs(netDelta) >= 500 && (
+              <DeltaChip
+                text={`${netDelta > 0 ? "+" : ""}${formatCompactMoney(netDelta)}`}
+                good={netDelta > 0}
+              />
+            )}
+          </AnimatePresence>
+        </div>
         <AnimatedNumber
           value={result.net}
           format={formatMoneySigned}
@@ -69,7 +163,17 @@ export function OutcomeDashboard({ result, risk }: OutcomeDashboardProps) {
       </Card>
 
       <Card className="flex flex-col justify-center">
-        <CardEyebrow>Club health</CardEyebrow>
+        <div className="flex items-center justify-between gap-2">
+          <CardEyebrow>Club health</CardEyebrow>
+          <AnimatePresence>
+            {deltas && healthDelta !== 0 && (
+              <DeltaChip
+                text={`${healthDelta > 0 ? "+" : ""}${healthDelta} health`}
+                good={healthDelta > 0}
+              />
+            )}
+          </AnimatePresence>
+        </div>
         <div className="mt-4">
           <HealthGauge value={result.health} />
         </div>
