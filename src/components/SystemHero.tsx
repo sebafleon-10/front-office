@@ -90,7 +90,7 @@ const DERIVED_DETAIL: Record<
   },
   position: {
     label: "League position",
-    detail: "points = round(ppg × 14), then ranked against 11 fixed rivals",
+    detail: "points = round(ppg × 14), ranked against the 11-rival par ladder",
   },
   fanbase: {
     label: "Fanbase",

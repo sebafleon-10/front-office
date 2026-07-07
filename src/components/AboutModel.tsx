@@ -46,7 +46,7 @@ const CHAIN: { step: string; body: string }[] = [
   },
   {
     step: "Points become placement",
-    body: "You drop into a fixed ladder of 11 rivals (9 to 31 points). Your rank is 1 plus however many rivals finished above you — beat 31 and you are champion.",
+    body: "You drop into a reference ladder of 11 rivals (9 to 31 points) — the league at par. Your rank is 1 plus however many rivals finished above you — beat 31 and you are champion. In Run the season, every rival's total varies with the same luck yours does.",
   },
   {
     step: "Placement and books become health",
@@ -137,6 +137,25 @@ const COSTS: { name: string; formula: string; note: string }[] = [
   },
 ];
 
+const SIMPLIFICATIONS: { name: string; body: string }[] = [
+  {
+    name: "Rivals don't react to you",
+    body: "The plan view ranks you against the league at par, and even in Run the season rivals draw luck, not strategy — no one counter-bids your wage spend. Modeling rival behavior would teach game theory; this model teaches your own tradeoffs first.",
+  },
+  {
+    name: "One season, not a cycle",
+    body: "Academy investment pays out inside the same season. In reality youth development is a three-to-five-year bet — the model compresses that velocity so a single sitting can feel the whole loop.",
+  },
+  {
+    name: "Overhead never scales",
+    body: "Rent, admin and the lights cost the same at any ambition level. A bigger wage bill would drag some back-office cost with it; holding overhead flat keeps the levers' effects clean and comparable.",
+  },
+  {
+    name: "Sponsorship is your pie alone",
+    body: "Sponsor money responds to your success and fanbase but no rival competes for the same local deals. A shared, zero-sum sponsor market is a real force in lower leagues — and out of scope on purpose.",
+  },
+];
+
 const SCORES: { name: string; range: string; body: string }[] = [
   {
     name: "Sport score",
@@ -169,8 +188,9 @@ export function AboutModel() {
             decisions and walks a fixed causal chain from spend to squad to
             table to books — the same plan always produces the same season.
             The only luck in the product lives in Run the season, which
-            replays this exact engine under seeded noise on form and turnout,
-            rivals held fixed, to show the spread around your plan. Every
+            replays this exact engine under seeded noise on form and turnout
+            — for your club and every rival — to show the spread around your
+            plan. Every
             figure below traces back to the same formulas that drive the
             panels above — move a lever and watch the whole chain re-settle.
           </p>
@@ -315,6 +335,30 @@ export function AboutModel() {
                     {s.range}
                   </span>
                 </div>
+                <p className="mt-2 text-[13px] leading-relaxed text-[var(--color-text-muted)]">
+                  {s.body}
+                </p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <div className="fo-divider" aria-hidden />
+
+        {/* Deliberate scope choices */}
+        <section className="mt-8">
+          <BlockLabel>What this model deliberately ignores</BlockLabel>
+          <p className="mb-4 text-[13px] leading-relaxed text-[var(--color-text-muted)]">
+            A model earns trust by naming its edges. These four forces are
+            real in lower-league football and left out on purpose — each one
+            traded away to keep cause and effect legible in a single sitting.
+          </p>
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+            {SIMPLIFICATIONS.map((s) => (
+              <div key={s.name} className="fo-card-inset p-4">
+                <span className="text-[14px] font-semibold text-[var(--color-text)]">
+                  {s.name}
+                </span>
                 <p className="mt-2 text-[13px] leading-relaxed text-[var(--color-text-muted)]">
                   {s.body}
                 </p>

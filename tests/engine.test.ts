@@ -7,6 +7,8 @@ import {
   MAX_PPG,
   MAX_CONVERSION,
   CAPACITY,
+  PRIZE_STEP,
+  RIVAL_POINTS,
   TEAMS,
 } from "@/lib/assumptions";
 
@@ -203,5 +205,32 @@ describe("shock invariance", () => {
         runSeason(inputs),
       );
     }
+  });
+
+  it("passing the fixed rival points explicitly changes nothing", () => {
+    const inputs = balanced(PRESETS.balanced);
+    expect(
+      runSeason(inputs, { ppg: 0, conversion: 0, rivalPoints: RIVAL_POINTS }),
+    ).toEqual(runSeason(inputs));
+  });
+
+  it("a rival shock reranks the table but leaves the club's own season alone", () => {
+    const inputs = balanced(PRESETS.balanced);
+    const base = runSeason(inputs);
+    // Every rival has a great year: +6 points across the board.
+    const shifted = runSeason(inputs, {
+      ppg: 0,
+      conversion: 0,
+      rivalPoints: RIVAL_POINTS.map((p) => p + 6),
+    });
+    expect(shifted.points).toBe(base.points);
+    expect(shifted.position).toBeGreaterThan(base.position);
+    // Money moves only through prize steps tied to placement.
+    expect(base.net - shifted.net).toBeCloseTo(
+      (shifted.position - base.position) * PRIZE_STEP,
+      6,
+    );
+    expect(shifted.attendance).toBe(base.attendance);
+    expect(shifted.sponsorship).toBe(base.sponsorship);
   });
 });

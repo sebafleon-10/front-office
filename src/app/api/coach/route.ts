@@ -95,7 +95,7 @@ function riskSection(risk: CoachRisk): string {
   return `
 
 RISK PROFILE ACROSS ${formatNumber(risk.runs)} SIMULATED SEASONS
-The same plan replayed under seeded season-to-season noise on form and turnout, rivals held fixed:
+The same plan replayed under seeded season-to-season noise on form and turnout, with every rival's season varying the same way:
 - Finish: median ${ordinal(risk.positionP50)}; ${ordinal(risk.positionP5)}–${ordinal(risk.positionP95)} in 90% of seasons
 - Net result: median ${formatMoneySigned(Math.round(risk.netP50))}; worst 5% ${formatMoneySigned(Math.round(risk.netP5))}; best 5% ${formatMoneySigned(Math.round(risk.netP95))}
 - Made the playoffs (top 4) in ${pct(risk.pPlayoffs)} of seasons; profitable in ${pct(risk.pProfit)}; bottom three in ${pct(risk.pBottomThree)}`;

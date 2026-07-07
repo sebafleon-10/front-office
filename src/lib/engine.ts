@@ -75,6 +75,12 @@ export interface SeasonShocks {
   ppg: number;
   /** Multiplicative shock to attendance conversion (0.05 = +5%), applied inside the conversion clamp. */
   conversion: number;
+  /**
+   * The rivals' season totals for this run. Omitted, the fixed reference
+   * league (RIVAL_POINTS) is used — the Monte Carlo layer passes seeded
+   * variations so the whole table shares your club's luck.
+   */
+  rivalPoints?: readonly number[];
 }
 
 const NO_SHOCKS: SeasonShocks = { ppg: 0, conversion: 0 };
@@ -132,8 +138,11 @@ export function positionLabel(position: number): PositionLabel {
   return "Relegation zone";
 }
 
-export function buildLeagueTable(yourPoints: number): LeagueRow[] {
-  const rivals = RIVAL_POINTS.map((p, i) => ({
+export function buildLeagueTable(
+  yourPoints: number,
+  rivalPoints: readonly number[] = RIVAL_POINTS,
+): LeagueRow[] {
+  const rivals = rivalPoints.map((p, i) => ({
     name: RIVAL_NAMES[i],
     points: p,
     isYourClub: false,
@@ -189,8 +198,9 @@ export function runSeason(
 
   const points = Math.round(ppg * GAMES);
 
+  const rivalPoints = shocks.rivalPoints ?? RIVAL_POINTS;
   const position =
-    1 + RIVAL_POINTS.reduce((n, p) => (p > points ? n + 1 : n), 0);
+    1 + rivalPoints.reduce((n, p) => (p > points ? n + 1 : n), 0);
 
   const marketingLift =
     (Math.sqrt(marketingRatio) - 1) * MARKETING_FAN_FACTOR;
@@ -305,6 +315,6 @@ export function runSeason(
     sportScore,
     finScore,
     health,
-    table: buildLeagueTable(points),
+    table: buildLeagueTable(points, rivalPoints),
   };
 }

@@ -86,8 +86,11 @@ export const FIN_SCORE_SCALE = 500_000;
  * times and the fixture draw; ±10% across a season at two sigma gives a
  * multiplicative sd of 0.05.
  *
- * Rivals' points stay fixed across runs: the distribution shows YOUR
- * variance, not theirs (documented in About the model).
+ * Rivals share the same luck: each rival's season-average ppg takes a
+ * normal shock of sd PPG_SD per run (clamped to the same ppg bounds), so
+ * the whole table varies together. RIVAL_POINTS below is the league at
+ * par — the fixed reference ladder the deterministic plan view ranks
+ * against (documented in About the model).
  *
  * Zero shocks reproduce the deterministic engine exactly — a gold test
  * pins that invariance.

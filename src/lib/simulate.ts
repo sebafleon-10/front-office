@@ -1,8 +1,12 @@
 import {
   CONVERSION_SD,
+  GAMES,
+  MAX_PPG,
   MC_RUNS,
   MC_SEED,
+  MIN_PPG,
   PPG_SD,
+  RIVAL_POINTS,
   TEAMS,
 } from "./assumptions";
 import { runSeason, type SeasonInputs, type SeasonResult } from "./engine";
@@ -107,10 +111,21 @@ export function simulateSeasons(
   const normal = makeNormal(mulberry32(seed));
   const results: SeasonResult[] = [];
   for (let i = 0; i < runs; i++) {
+    // Rivals draw from the same luck distribution your club does: each
+    // rival's season-average ppg takes a normal shock of sd PPG_SD, clamped
+    // to the same ppg bounds. The fixed RIVAL_POINTS ladder is the league
+    // at par; here the whole table breathes.
+    const rivalPoints = RIVAL_POINTS.map((p) =>
+      Math.round(
+        Math.min(MAX_PPG, Math.max(MIN_PPG, p / GAMES + normal() * PPG_SD)) *
+          GAMES,
+      ),
+    );
     results.push(
       runSeason(inputs, {
         ppg: normal() * PPG_SD,
         conversion: normal() * CONVERSION_SD,
+        rivalPoints,
       }),
     );
   }

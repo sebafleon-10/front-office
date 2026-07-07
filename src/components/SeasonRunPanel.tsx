@@ -106,8 +106,9 @@ export function SeasonRunPanel({
               <p className="text-[12px] leading-relaxed text-[var(--color-text-subtle)]">
                 {summary.runs.toLocaleString("en-US")}{" "}seasons of the same
                 plan, different luck — seeded noise on form and turnout over
-                the exact deterministic engine. Rivals&rsquo; totals stay
-                fixed: this is your variance, not theirs.
+                the exact deterministic engine, for your club and every rival
+                alike. The dashboard above is the league at par; here the
+                whole table breathes.
               </p>
               {actions && (
                 <div className="flex flex-none flex-wrap items-center gap-2">
