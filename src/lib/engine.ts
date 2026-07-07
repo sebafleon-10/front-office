@@ -153,8 +153,10 @@ export function buildLeagueTable(
   ];
   rows.sort((a, b) => {
     if (b.points !== a.points) return b.points - a.points;
-    if (a.isYourClub) return 1;
-    if (b.isYourClub) return -1;
+    // Ties go to your club, matching the position formula (which counts
+    // only rivals strictly above you) — the table must agree with the rank.
+    if (a.isYourClub) return -1;
+    if (b.isYourClub) return 1;
     return 0;
   });
   return rows;

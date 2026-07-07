@@ -67,6 +67,16 @@ describe("league table", () => {
     expect(yourIndex).toBe(r.position - 1);
   });
 
+  it("keeps the table row consistent with position on a points tie", () => {
+    // Develop and sell lands on exactly 21 points — tied with a rival.
+    // The position formula counts only rivals strictly above you (5th),
+    // so the rendered table must agree.
+    const r = runSeason(balanced(PRESETS.developAndSell));
+    expect(r.position).toBe(5);
+    const yourIndex = r.table.findIndex((row) => row.isYourClub);
+    expect(yourIndex).toBe(r.position - 1);
+  });
+
   it("orders rows by points descending", () => {
     const r = runSeason(balanced(PRESETS.buyWinsNow));
     for (let i = 1; i < r.table.length; i++) {
