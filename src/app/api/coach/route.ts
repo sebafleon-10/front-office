@@ -134,6 +134,8 @@ function buildContext(
 ): string {
   const sportPct = Math.round(inputs.weightSport * 100);
   const financePct = Math.round(inputs.weightFinance * 100);
+  // isValid() doesn't pin every result field — never let a crafted body put NaN in the prompt.
+  const financing = isNum(result.financingCost) ? result.financingCost : 0;
 
   return `THE SEASON THE EXECUTIVE RAN
 
@@ -146,7 +148,11 @@ Decisions (front-office spend and pricing):
 - Ticket price: $${inputs.price}
 - Total controllable spend: ${formatMoney(result.controllable)} of a ${formatMoney(
     BUDGET,
-  )} budget${result.overBudget ? " (OVER BUDGET)" : ""}
+  )} budget${
+    result.overBudget
+      ? ` (OVER BUDGET — the board financed the gap, charging ${formatMoney(financing)} in emergency financing)`
+      : ""
+  }
 - Success weighting: ${sportPct}% sporting / ${financePct}% financial
 
 On the pitch:
@@ -163,7 +169,11 @@ The books (season profit & loss):
 - Prize money: ${formatMoney(result.prize)}
 - Player trading: ${formatMoney(result.playerSales)}
 - Total revenue: ${formatMoney(result.totalRevenue)}
-- Total cost: ${formatMoney(result.totalCost)}
+- Total cost: ${formatMoney(result.totalCost)}${
+    financing > 0
+      ? `\n- of which emergency financing on over-cap spend: ${formatMoney(financing)}`
+      : ""
+  }
 - NET RESULT: ${formatMoneySigned(result.net)}
 
 Scores (0-100):

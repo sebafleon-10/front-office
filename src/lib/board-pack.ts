@@ -44,6 +44,11 @@ export function formatBoardPack(d: BoardPackData): string {
     `PLAN ON PAPER (deterministic engine)`,
     `  ${label("Finish")}${ordinal(result.position)} of 12 · ${result.points} pts (${result.positionLabel})`,
     `  ${label("Net result")}${formatMoneySigned(Math.round(result.net))}`,
+    ...(result.financingCost > 0
+      ? [
+          `  ${label("Over-cap financing")}${formatMoney(Math.round(result.financingCost))} (spend ran past the budget)`,
+        ]
+      : []),
     `  ${label("Attendance")}${formatNumber(result.attendance)} of 6,000 seats`,
     `  ${label("Club health")}${Math.round(result.health)}/100`,
   ];

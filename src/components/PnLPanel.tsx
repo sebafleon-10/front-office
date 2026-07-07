@@ -14,6 +14,8 @@ interface Line {
   label: string;
   value: number;
   kind: "revenue" | "cost";
+  /** Render label and value in the loss color — the over-cap penalty line. */
+  loss?: boolean;
 }
 
 function PnLBar({
@@ -92,6 +94,16 @@ export function PnLPanel({ result }: PnLPanelProps) {
     { label: "Front office spend", value: result.controllable, kind: "cost" },
     { label: "Matchday operating", value: result.matchdayCost, kind: "cost" },
     { label: "Fixed overhead", value: result.fixedOverhead, kind: "cost" },
+    ...(result.financingCost > 0
+      ? [
+          {
+            label: "Emergency financing",
+            value: result.financingCost,
+            kind: "cost" as const,
+            loss: true,
+          },
+        ]
+      : []),
   ];
 
   const maxLine = Math.max(
@@ -167,14 +179,24 @@ export function PnLPanel({ result }: PnLPanelProps) {
                 key={line.label}
                 className="grid grid-cols-[1fr_2fr_auto] items-center gap-4"
               >
-                <span className="text-[14px] text-[var(--color-text-muted)]">
+                <span
+                  className={`text-[14px] ${
+                    line.loss
+                      ? "text-[var(--color-loss)]"
+                      : "text-[var(--color-text-muted)]"
+                  }`}
+                >
                   {line.label}
                 </span>
                 <PnLBar value={line.value} max={maxLine} kind={line.kind} />
                 <AnimatedNumber
                   value={line.value}
                   format={formatMoney}
-                  className="fo-tnum text-[14px] font-medium text-[var(--color-text)]"
+                  className={`fo-tnum text-[14px] font-medium ${
+                    line.loss
+                      ? "text-[var(--color-loss)]"
+                      : "text-[var(--color-text)]"
+                  }`}
                 />
               </li>
             ))}

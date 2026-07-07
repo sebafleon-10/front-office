@@ -39,6 +39,7 @@ import {
   MIN_CONVERSION,
   MIN_PPG,
   MIN_QUALITY,
+  OVERAGE_FINANCING_RATE,
   PPG_PER_QUALITY,
   PRIZE_STEP,
   RIVAL_NAMES,
@@ -109,6 +110,8 @@ export interface SeasonResult {
   matchdayCost: number;
   controllable: number;
   fixedOverhead: number;
+  /** 12% charge on controllable spend above the budget cap; 0 at or under it. */
+  financingCost: number;
   totalCost: number;
   net: number;
   budgetRemaining: number;
@@ -258,7 +261,10 @@ export function runSeason(
 
   const matchdayCost = attendance * MATCHDAY_COST_PER_HEAD * HOME;
   const controllable = wages + academy + marketing + facilities + commercial;
-  const totalCost = controllable + matchdayCost + FIXED_OVERHEAD;
+  const financingCost =
+    Math.max(0, controllable - BUDGET) * OVERAGE_FINANCING_RATE;
+  const totalCost =
+    controllable + matchdayCost + FIXED_OVERHEAD + financingCost;
   const net = totalRevenue - totalCost;
   const budgetRemaining = BUDGET - controllable;
   const overBudget = controllable > BUDGET;
@@ -291,6 +297,7 @@ export function runSeason(
     matchdayCost,
     controllable,
     fixedOverhead: FIXED_OVERHEAD,
+    financingCost,
     totalCost,
     net,
     budgetRemaining,

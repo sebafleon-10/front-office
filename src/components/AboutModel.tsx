@@ -11,6 +11,7 @@ import {
   HOME,
   MATCHDAY_COST_PER_HEAD,
   MERCH_PER_FAN,
+  OVERAGE_FINANCING_RATE,
   PRIZE_STEP,
   TEAMS,
 } from "@/lib/assumptions";
@@ -117,7 +118,7 @@ const COSTS: { name: string; formula: string; note: string }[] = [
   {
     name: "Front office spend",
     formula: "wages + academy + marketing + facilities + commercial",
-    note: `Your five money levers added up. Capped by a ${formatCompactMoney(BUDGET)} budget — cross it and you are flagged over.`,
+    note: `Your five money levers added up, against a ${formatCompactMoney(BUDGET)} budget. The board will let you cross it — but not for free.`,
   },
   {
     name: "Matchday operating",
@@ -128,6 +129,11 @@ const COSTS: { name: string; formula: string; note: string }[] = [
     name: "Fixed overhead",
     formula: `${formatMoney(FIXED_OVERHEAD)} flat`,
     note: "Rent, admin, the lights. It does not move with any decision.",
+  },
+  {
+    name: "Emergency financing",
+    formula: `(spend − ${formatCompactMoney(BUDGET)}) × ${Math.round(OVERAGE_FINANCING_RATE * 100)}%`,
+    note: "The price of overruling the budget: the board finances the gap at a short-term rate. Stay at or under the cap and this line is zero.",
   },
 ];
 

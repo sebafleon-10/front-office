@@ -37,6 +37,20 @@ describe("formatBoardPack", () => {
     expect(text).not.toContain("RISK ACROSS");
     expect(text).not.toContain("DEBRIEF");
     expect(text).not.toContain("Open this exact plan");
+    expect(text).not.toContain("Over-cap financing");
     expect(text.endsWith("\n")).toBe(false);
+  });
+
+  it("names the financing penalty when the plan runs over the cap", () => {
+    const overCap: SeasonInputs = {
+      ...inputs,
+      wages: 1_200_000,
+      academy: 100_000,
+      marketing: 0,
+      facilities: 0,
+      commercial: 100_000,
+    };
+    const text = formatBoardPack({ inputs: overCap, result: runSeason(overCap) });
+    expect(text).toContain("Over-cap financing    $24,000");
   });
 });

@@ -3,7 +3,7 @@
 import { motion, useReducedMotion } from "framer-motion";
 import { AnimatedNumber } from "./AnimatedNumber";
 import { formatCompactMoney, formatMoney } from "@/lib/format";
-import { BUDGET } from "@/lib/assumptions";
+import { BUDGET, OVERAGE_FINANCING_RATE } from "@/lib/assumptions";
 
 interface BudgetMeterProps {
   controllable: number;
@@ -45,8 +45,11 @@ export function BudgetMeter({ controllable, overBudget }: BudgetMeterProps) {
         {overBudget ? (
           <span className="text-[var(--color-loss)]">
             <span className="font-medium">Over budget.</span>{" "}
-            {formatMoney(controllable - BUDGET)} above the cap. Trim spending
-            to stay in the green.
+            {formatMoney(controllable - BUDGET)}{" "}above the cap — the board
+            finances the gap at {Math.round(OVERAGE_FINANCING_RATE * 100)}%,
+            costing{" "}
+            {formatMoney((controllable - BUDGET) * OVERAGE_FINANCING_RATE)}{" "}
+            this season.
           </span>
         ) : (
           <span className="text-[var(--color-text-subtle)]">

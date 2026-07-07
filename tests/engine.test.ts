@@ -97,6 +97,46 @@ describe("budget meter state", () => {
   });
 });
 
+describe("budget overage financing", () => {
+  // Pinned like the gold scenarios: the under-cap season is untouched, and
+  // the over-cap season pays exactly rate × overage on top of the old cost.
+  it("charges 12% emergency financing on spend above the cap (pinned)", () => {
+    const r = runSeason({
+      wages: 1_200_000,
+      academy: 100_000,
+      marketing: 0,
+      facilities: 0,
+      commercial: 100_000,
+      price: 18,
+      weightSport: 0.5,
+      weightFinance: 0.5,
+    });
+    expect(r.controllable).toBe(1_400_000);
+    expect(r.financingCost).toBe(24_000); // ($1.4M − $1.2M) × 0.12
+    expect(r.totalCost).toBeCloseTo(1_887_770, 0);
+    expect(r.net).toBeCloseTo(-765_942, 0);
+  });
+
+  it("charges nothing at or under the cap", () => {
+    const balanced_ = runSeason(balanced(PRESETS.balanced));
+    expect(balanced_.financingCost).toBe(0);
+
+    const atCap = runSeason({
+      wages: 1_200_000,
+      academy: 0,
+      marketing: 0,
+      facilities: 0,
+      commercial: 0,
+      price: 18,
+      weightSport: 0.5,
+      weightFinance: 0.5,
+    });
+    expect(atCap.controllable).toBe(1_200_000);
+    expect(atCap.overBudget).toBe(false);
+    expect(atCap.financingCost).toBe(0);
+  });
+});
+
 describe("clamp and boundary behavior", () => {
   it("floors squad quality and drops to last place when nothing is spent", () => {
     const r = runSeason({

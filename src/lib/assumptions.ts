@@ -4,6 +4,16 @@ export const TEAMS = 12;
 
 export const BUDGET = 1_200_000;
 
+/*
+ * OVERAGE_FINANCING_RATE — the board does not block an over-cap plan, it
+ * finances the gap, and that money is not free. Spend above the budget is
+ * charged at 12% for the season, priced like the emergency working-capital
+ * facility a lower-league club would actually lean on (short-term, unsecured,
+ * arranged mid-season). At or under the cap the charge is exactly zero, so
+ * every under-budget season is untouched by it.
+ */
+export const OVERAGE_FINANCING_RATE = 0.12;
+
 export const WAGE_BENCHMARK = 600_000;
 export const ACADEMY_BENCHMARK = 150_000;
 export const MARKETING_BENCHMARK = 120_000;
