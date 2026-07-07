@@ -17,6 +17,7 @@ import { OutcomeDashboard } from "@/components/OutcomeDashboard";
 import { LeagueTable } from "@/components/LeagueTable";
 import { PnLPanel } from "@/components/PnLPanel";
 import { SeasonRunPanel } from "@/components/SeasonRunPanel";
+import { SensitivityPanel } from "@/components/SensitivityPanel";
 import { ComparePanel } from "@/components/ComparePanel";
 import { CopyChip } from "@/components/CopyChip";
 import { CoachPanel } from "@/components/CoachPanel";
@@ -268,7 +269,7 @@ export function HomeClient({ initialState, fromUrl }: HomeClientProps) {
             <OutcomeDashboard result={result} risk={activeRun} />
           </div>
 
-          <div className="lg:col-start-1 lg:row-span-4 lg:row-start-1">
+          <div className="lg:col-start-1 lg:row-span-5 lg:row-start-1">
             <ControlPanel
               state={state}
               controllable={result.controllable}
@@ -286,10 +287,14 @@ export function HomeClient({ initialState, fromUrl }: HomeClientProps) {
             <PnLPanel result={result} />
           </div>
 
+          <div className="lg:col-start-2 lg:row-start-3">
+            <SensitivityPanel inputs={inputs} />
+          </div>
+
           <div
             id="season-run"
             style={{ scrollMarginTop: 76 }}
-            className="lg:col-start-2 lg:row-start-3"
+            className="lg:col-start-2 lg:row-start-4"
           >
             <SeasonRunPanel
               summary={run?.summary ?? null}
@@ -327,7 +332,7 @@ export function HomeClient({ initialState, fromUrl }: HomeClientProps) {
             )}
           </div>
 
-          <div className="lg:col-start-2 lg:row-start-4">
+          <div className="lg:col-start-2 lg:row-start-5">
             <CoachPanel
               inputs={inputs}
               result={result}
