@@ -27,7 +27,7 @@ export function CopyChip({ label, copiedLabel = "Copied", getText }: CopyChipPro
     <button
       type="button"
       onClick={handleCopy}
-      className="rounded-full border border-[var(--color-hairline-strong)] px-3 py-1.5 text-[12px] font-medium text-[var(--color-text-muted)] transition-colors hover:border-[var(--color-accent-muted)] hover:text-[var(--color-text)]"
+      className="fo-btn-secondary"
     >
       {copied ? copiedLabel : label}
     </button>

@@ -426,10 +426,10 @@ export function SystemHero({
                 type="button"
                 onClick={() => applyPreset(key)}
                 aria-pressed={isActive}
-                className={`rounded-full border px-3 py-1.5 text-[12px] font-medium transition-colors ${
+                className={`fo-btn-secondary ${
                   isActive
                     ? "border-[var(--color-accent)] bg-[var(--color-accent-soft)] text-[var(--color-accent)]"
-                    : "border-[var(--color-hairline-strong)] text-[var(--color-text-muted)] hover:border-[var(--color-accent-muted)] hover:text-[var(--color-text)]"
+                    : ""
                 }`}
               >
                 {label}

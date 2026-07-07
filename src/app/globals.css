@@ -190,6 +190,32 @@
     opacity: 0.7;
   }
 
+  /* Shared quiet pill button — the secondary action everywhere (copy chips,
+     pin, preset chips). Callers may override border/color for active states. */
+  .fo-btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 9999px;
+    border: 1px solid var(--color-hairline-strong);
+    padding: 6px 12px;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--color-text-muted);
+    transition: color 200ms cubic-bezier(0.32, 0.72, 0, 1),
+      border-color 200ms cubic-bezier(0.32, 0.72, 0, 1);
+  }
+
+  .fo-btn-secondary:hover {
+    border-color: var(--color-accent-muted);
+    color: var(--color-text);
+  }
+
+  .fo-btn-secondary:disabled {
+    cursor: default;
+    opacity: 0.5;
+  }
+
   .fo-pitch-stripes {
     background-image: repeating-linear-gradient(
       90deg,

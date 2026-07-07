@@ -303,7 +303,7 @@ export function HomeClient({ initialState, fromUrl }: HomeClientProps) {
                       type="button"
                       onClick={handlePin}
                       disabled={isPinnedPlan}
-                      className="rounded-full border border-[var(--color-hairline-strong)] px-3 py-1.5 text-[12px] font-medium text-[var(--color-text-muted)] transition-colors hover:border-[var(--color-accent-muted)] hover:text-[var(--color-text)] disabled:cursor-default disabled:opacity-50"
+                      className="fo-btn-secondary"
                     >
                       {isPinnedPlan ? "Pinned" : "Pin this plan"}
                     </button>
