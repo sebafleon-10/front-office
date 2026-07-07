@@ -200,9 +200,15 @@ function buildFallbackBrief(inputs: SeasonInputs, result: SeasonResult): string 
         ? "loss-leader pricing"
         : "mid-market pricing";
 
+  const financing = isNum(result.financingCost) ? result.financingCost : 0;
+  const financingNote =
+    financing > 0
+      ? ` Spending also ran ${formatMoney(result.controllable - BUDGET)} past the ${formatMoney(BUDGET)} cap, and the board financed the gap — ${formatMoney(financing)} of the result is that emergency facility.`
+      : "";
+
   return [
     `You finished ${ordinal(result.position)} in a ${TEAMS}-team table with ${result.points} points and a net result of ${formatMoneySigned(result.net)}.`,
-    `Wages absorbed ${wageShare}% of the ${formatMoney(result.controllable)} you put through the front office, and you ran ${priceNote} at $${inputs.price}. Sponsorship landed at ${formatMoney(result.sponsorship)} and player trading delivered ${formatMoney(result.playerSales)}.`,
+    `Wages absorbed ${wageShare}% of the ${formatMoney(result.controllable)} you put through the front office, and you ran ${priceNote} at $${inputs.price}. Sponsorship landed at ${formatMoney(result.sponsorship)} and player trading delivered ${formatMoney(result.playerSales)}.${financingNote}`,
     `The story of the year is the tradeoff between table finish and cash on hand — the lesson the board will want to talk through next. This is the sample memo; the live coach also weighs the strategies you didn't pick and the risk profile of the one you did.`,
   ].join("\n\n");
 }
