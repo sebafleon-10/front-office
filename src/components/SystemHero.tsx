@@ -400,6 +400,11 @@ export function SystemHero({
             the books and club health all recompute live — off the exact
             deterministic engine that drives the command center below.
           </p>
+          <p className="mt-2 max-w-[560px] text-[12px] leading-relaxed text-[var(--color-text-subtle)] lg:hidden">
+            On this screen the model reads top to bottom: your six decisions
+            first, then everything they drive. A larger screen draws the full
+            causal map between them.
+          </p>
         </motion.div>
 
         {/* preset chips */}

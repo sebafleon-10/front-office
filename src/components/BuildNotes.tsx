@@ -16,7 +16,7 @@ export function BuildNotes() {
         </header>
 
         <div className="grid gap-8 lg:grid-cols-2 lg:gap-10">
-          <div className="flex flex-col gap-6">
+          <div className="flex min-w-0 flex-col gap-6">
             <div>
               <h3 className="text-[15px] font-semibold text-[var(--color-text)]">
                 Excel first, validated to the dollar
@@ -45,14 +45,15 @@ Grow fanbase      6th   net -$54,876   ±$0.50`}
             </div>
           </div>
 
-          <div className="flex flex-col gap-6">
+          <div className="flex min-w-0 flex-col gap-6">
             <div>
               <h3 className="text-[15px] font-semibold text-[var(--color-text)]">
                 Deterministic core, probabilistic shell
               </h3>
               <p className="mt-2 text-[14px] leading-relaxed text-[var(--color-text-muted)]">
-                Run the season layers seeded Monte Carlo noise — form and
-                turnout, a thousand replays — on top of the untouched engine.
+                Run the season layers seeded Monte Carlo noise — form, turnout
+                and every rival&rsquo;s season, a thousand replays — on top of
+                the untouched engine.
                 Zero noise reproduces the deterministic season bit for bit,
                 and the seeded distribution itself is pinned by tests. The
                 layering is deliberate: reasoning on top, deterministic code
