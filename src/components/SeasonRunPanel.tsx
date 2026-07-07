@@ -186,7 +186,17 @@ function PositionStrip({
       <p className="text-[12px] font-medium text-[var(--color-text-subtle)]">
         Where you finish
       </p>
-      <div className="mt-3 flex h-[96px] items-end gap-[6px]">
+      <div
+        className="mt-3 flex h-[96px] items-end gap-[6px]"
+        role="img"
+        aria-label={`Finishing positions across ${summary.runs.toLocaleString(
+          "en-US",
+        )} simulated seasons: median ${ordinal(summary.positionP50)}, ${ordinal(
+          summary.positionP5,
+        )} to ${ordinal(summary.positionP95)} in 90% of seasons, playoffs in ${pct(
+          summary.pPlayoffs,
+        )}.`}
+      >
         {summary.positionCounts.map((count, i) => {
           const position = i + 1;
           const isMedian = position === summary.positionP50;
@@ -248,7 +258,17 @@ function NetHistogram({
       <p className="text-[12px] font-medium text-[var(--color-text-subtle)]">
         Where the books land
       </p>
-      <div className="mt-3 flex h-[96px] items-end gap-[3px]">
+      <div
+        className="mt-3 flex h-[96px] items-end gap-[3px]"
+        role="img"
+        aria-label={`Net result across ${summary.runs.toLocaleString(
+          "en-US",
+        )} simulated seasons: median ${formatCompactMoney(
+          summary.netP50,
+        )}, worst 5% ${formatCompactMoney(summary.netP5)}, best 5% ${formatCompactMoney(
+          summary.netP95,
+        )}. Profitable in ${pct(summary.pProfit)} of seasons.`}
+      >
         {summary.netHistogram.map((bin, i) => {
           const mid = (bin.start + bin.end) / 2;
           const share = bin.count / max;

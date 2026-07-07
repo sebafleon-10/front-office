@@ -150,6 +150,8 @@ export function CoachPanel({
             exit={{ opacity: 0 }}
             transition={{ duration: 0.28, ease: [0.32, 0.72, 0, 1] }}
             className="rounded-[10px] border border-[var(--color-hairline)] bg-[var(--color-surface-2)] p-5"
+            aria-live="polite"
+            aria-busy={loading}
           >
             <div className="flex items-center justify-between gap-3">
               <p className="flex items-center gap-2 text-[12px] uppercase tracking-[0.06em] text-[var(--color-text-subtle)]">
