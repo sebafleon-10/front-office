@@ -16,6 +16,7 @@ import {
 import { CAPACITY, PRESETS, type PresetKey } from "@/lib/assumptions";
 import { runSeason, type SeasonInputs, type SeasonResult } from "@/lib/engine";
 import { LEVERS, type LeverKey } from "@/lib/levers";
+import { hintSeen, markHintSeen } from "@/lib/storage";
 import {
   formatCompactMoney,
   formatMoneySigned,
@@ -248,21 +249,45 @@ export function SystemHero({
     el.scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "start" });
   }, [reduce, onEnter, values]);
 
-  const setLever = useCallback((key: LeverKey, v: number) => {
-    setValues((prev) => ({ ...prev, [key]: v }));
+  // First-visit nudge on the wages node — cleared the moment they interact.
+  const [dragNudge, setDragNudge] = useState(false);
+  const nudgeDismissed = useRef(false);
+  useEffect(() => {
+    const t = window.setTimeout(() => {
+      if (!hintSeen("hero-drag")) setDragNudge(true);
+    }, 0);
+    return () => window.clearTimeout(t);
+  }, []);
+  const dismissNudge = useCallback(() => {
+    if (nudgeDismissed.current) return;
+    nudgeDismissed.current = true;
+    markHintSeen("hero-drag");
+    setDragNudge(false);
   }, []);
 
-  const applyPreset = useCallback((key: PresetKey) => {
-    const p = PRESETS[key];
-    setValues({
-      wages: p.wages,
-      academy: p.academy,
-      marketing: p.marketing,
-      facilities: p.facilities,
-      commercial: p.commercial,
-      price: p.price,
-    });
-  }, []);
+  const setLever = useCallback(
+    (key: LeverKey, v: number) => {
+      dismissNudge();
+      setValues((prev) => ({ ...prev, [key]: v }));
+    },
+    [dismissNudge],
+  );
+
+  const applyPreset = useCallback(
+    (key: PresetKey) => {
+      dismissNudge();
+      const p = PRESETS[key];
+      setValues({
+        wages: p.wages,
+        academy: p.academy,
+        marketing: p.marketing,
+        facilities: p.facilities,
+        commercial: p.commercial,
+        price: p.price,
+      });
+    },
+    [dismissNudge],
+  );
 
   // ---- entrance animation ----
   const spring = reduce
@@ -524,9 +549,27 @@ export function SystemHero({
                     <span className="text-[11px] font-medium text-[var(--color-text-muted)]">
                       {lever.short}
                     </span>
-                    <span className="rounded-full bg-[var(--color-accent-soft)] px-1.5 py-px text-[9px] font-semibold uppercase tracking-wide text-[var(--color-accent)]">
-                      Input
-                    </span>
+                    {dragNudge && lever.key === "wages" ? (
+                      <motion.span
+                        animate={reduce ? undefined : { opacity: [1, 0.5, 1] }}
+                        transition={
+                          reduce
+                            ? undefined
+                            : {
+                                duration: 1.6,
+                                repeat: Infinity,
+                                ease: "easeInOut",
+                              }
+                        }
+                        className="rounded-full bg-[var(--color-accent)] px-1.5 py-px text-[9px] font-semibold uppercase tracking-wide text-[var(--color-bg)]"
+                      >
+                        Drag me
+                      </motion.span>
+                    ) : (
+                      <span className="rounded-full bg-[var(--color-accent-soft)] px-1.5 py-px text-[9px] font-semibold uppercase tracking-wide text-[var(--color-accent)]">
+                        Input
+                      </span>
+                    )}
                   </div>
                   <span className="fo-tnum fo-tight text-[18px] font-semibold leading-none text-[var(--color-text)]">
                     {inputValue(lever.key, v)}
