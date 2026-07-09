@@ -111,7 +111,7 @@ export function SensitivityPanel({ inputs }: SensitivityPanelProps) {
       </ul>
 
       <p className="mt-4 text-[12px] leading-relaxed text-[var(--color-text-subtle)]">
-        What one more increment on each lever does to this exact plan — net
+        What one more increment on each lever does to this exact plan: net
         result first, table movement when it happens. Past the budget cap,
         every extra dollar also pays the board&rsquo;s 12% financing.
       </p>

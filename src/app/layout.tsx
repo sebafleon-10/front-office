@@ -18,9 +18,9 @@ const SITE_URL =
     : process.env.VERCEL_URL
       ? `https://${process.env.VERCEL_URL}`
       : "http://localhost:3000");
-const TITLE = "Front Office — run the club";
+const TITLE = "Front Office: run the club";
 const DESCRIPTION =
-  "You run Meridian FC now: $1.2M, one season, six decisions. A business simulation of lower league soccer club economics — draft a plan, run it through 1,000 seasons of luck, and hear the board's verdict.";
+  "You run Meridian FC now: $1.2M, one season, six decisions. A business simulation of lower league soccer club economics: draft a plan, run it through 1,000 seasons of luck, and hear the board's verdict.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
@@ -36,7 +36,7 @@ export const metadata: Metadata = {
         url: "/hero-command-center.png",
         width: 1600,
         height: 1100,
-        alt: "Front Office command center — controls, league table, and season finances",
+        alt: "Front Office command center: controls, league table, and season finances",
       },
     ],
   },

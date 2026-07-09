@@ -83,7 +83,7 @@ export function CoachPanel({
       setCopied(true);
       window.setTimeout(() => setCopied(false), 1500);
     } catch {
-      // Clipboard unavailable (insecure context / denied) — silently no-op.
+      // Clipboard unavailable (insecure context / denied): silently no-op.
     }
   }
 
@@ -175,7 +175,7 @@ export function CoachPanel({
 
             {stale && (
               <p className="mt-3 rounded-[8px] border border-[var(--color-hairline)] bg-[var(--color-surface-1)] px-3 py-2 text-[12px] text-[var(--color-text-muted)]">
-                Strategy changed since this debrief — Regenerate to refresh it.
+                Strategy changed since this debrief. Regenerate to refresh it.
               </p>
             )}
 
@@ -196,7 +196,7 @@ export function CoachPanel({
           >
             Generate a written debrief on the strategy you have set. An AI
             consultant reads where the season ended, where the money went, and
-            what a different strategy would have produced — then writes the
+            what a different strategy would have produced, then writes the
             board&rsquo;s readout.
           </motion.p>
         )}

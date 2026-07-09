@@ -5,7 +5,7 @@ import type { ControlState } from "@/components/ControlPanel";
  * The whole plan fits in seven query params, so any scenario is a link:
  *   ?w=600000&a=150000&m=120000&f=120000&c=90000&p=18&ws=50
  * Every value read from a URL is clamped to the lever ranges and snapped to
- * the lever step — the URL is user input and is never trusted.
+ * the lever step: the URL is user input and is never trusted.
  */
 
 export const DEFAULT_STATE: ControlState = {

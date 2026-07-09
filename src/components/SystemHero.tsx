@@ -88,19 +88,19 @@ const DERIVED_DETAIL: Record<
   quality: {
     label: "Squad quality",
     plain:
-      "How good the team is, 0–92, league average 50 — bought mostly with wages, topped up by the academy.",
+      "How good the team is, 0–92, league average 50: bought mostly with wages, topped up by the academy.",
     formula: "quality = 50 × √(wages ÷ par) + academy bump, capped at 92",
   },
   position: {
     label: "League position",
     plain:
-      "Where you finish among 12 clubs — the top four make the playoffs.",
+      "Where you finish among 12 clubs: the top four make the playoffs.",
     formula: "points = round(ppg × 14), ranked against the 11-rival par ladder",
   },
   fanbase: {
     label: "Fanbase",
     plain:
-      "Everyone who cares about the club — grown by marketing and by winning.",
+      "Everyone who cares about the club: grown by marketing and by winning.",
     formula: "8,000 base, lifted by marketing spend and on-pitch success",
   },
   attendance: {
@@ -111,8 +111,8 @@ const DERIVED_DETAIL: Record<
   },
   net: {
     label: "Net result",
-    plain: "The season's profit or loss — what the board reads first.",
-    formula: "every revenue line minus every cost line — the bottom of the P&L",
+    plain: "The season's profit or loss: what the board reads first.",
+    formula: "every revenue line minus every cost line: the bottom of the P&L",
   },
   health: {
     label: "Club health",
@@ -249,7 +249,7 @@ export function SystemHero({
     el.scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "start" });
   }, [reduce, onEnter, values]);
 
-  // First-visit nudge on the wages node — cleared the moment they interact.
+  // First-visit nudge on the wages node: cleared the moment they interact.
   const [dragNudge, setDragNudge] = useState(false);
   const nudgeDismissed = useRef(false);
   useEffect(() => {
@@ -330,7 +330,7 @@ export function SystemHero({
   return (
     <section
       id={asSection ? "interactive-model" : undefined}
-      aria-label="Front Office — interactive model"
+      aria-label="Front Office: interactive model"
       className={`relative isolate w-full overflow-hidden ${
         asSection
           ? "fo-pitch-stripes border-t border-[var(--color-hairline)]"
@@ -397,7 +397,7 @@ export function SystemHero({
           </h1>
           <p className="mt-3 max-w-[560px] text-[14px] leading-relaxed text-[var(--color-text-muted)] sm:text-[15px]">
             Drag any blue decision. Squad quality, the league table, the crowd,
-            the books and club health all recompute live — off the exact
+            the books and club health all recompute live, off the exact
             deterministic engine that drives the command center below.
           </p>
           <p className="mt-2 max-w-[560px] text-[12px] leading-relaxed text-[var(--color-text-subtle)] lg:hidden">
@@ -728,7 +728,7 @@ export function SystemHero({
             </>
           ) : (
             <p className="text-[13px] leading-relaxed text-[var(--color-text-subtle)]">
-              Hover or focus any node to see what drives it — plain English
+              Hover or focus any node to see what drives it: plain English
               first, formula included. Drag a blue input and watch the whole
               chain re-settle.
             </p>

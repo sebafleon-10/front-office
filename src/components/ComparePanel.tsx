@@ -6,7 +6,7 @@ import type { MonteCarloSummary } from "@/lib/simulate";
 
 interface ComparePanelProps {
   pinnedSummary: MonteCarloSummary;
-  /** Current plan's summary — null until the current plan has been run. */
+  /** Current plan's summary: null until the current plan has been run. */
   currentSummary: MonteCarloSummary | null;
   /** True when the pinned plan IS the current plan. */
   samePlan: boolean;

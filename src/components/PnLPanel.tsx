@@ -14,7 +14,7 @@ interface Line {
   label: string;
   value: number;
   kind: "revenue" | "cost";
-  /** Render label and value in the loss color — the over-cap penalty line. */
+  /** Render label and value in the loss color: the over-cap penalty line. */
   loss?: boolean;
 }
 

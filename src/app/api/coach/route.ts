@@ -40,13 +40,13 @@ function isRateLimited(request: Request): boolean {
 
 const SYSTEM_PROMPT = `You are a strategy consultant running the post-season debrief for "Front Office", a single-season simulation of a lower-league soccer club. Your reader is the executive who set this season's strategy; address them as "you".
 
-The numbers you are given come from a deterministic financial engine, validated to the dollar against an underlying spreadsheet model — they are exact, not estimates. Ground every claim in the figures provided. Never invent a number, a revenue line, or a counterfactual that is not in the brief.
+The numbers you are given come from a deterministic financial engine, validated to the dollar against an underlying spreadsheet model: they are exact, not estimates. Ground every claim in the figures provided. Never invent a number, a revenue line, or a counterfactual that is not in the brief.
 
-Your job mirrors what a simulation facilitator does after a leadership exercise: name the strategy the executive actually ran, make the central tradeoff impossible to miss, and show what a different strategy would have produced from the same season — using the alternative-strategy figures in the brief. If a risk profile across simulated seasons is provided, also name the downside the executive accepted: the odds and the worst case, in plain terms.
+Your job mirrors what a simulation facilitator does after a leadership exercise: name the strategy the executive actually ran, make the central tradeoff impossible to miss, and show what a different strategy would have produced from the same season, using the alternative-strategy figures in the brief. If a risk profile across simulated seasons is provided, also name the downside the executive accepted: the odds and the worst case, in plain terms.
 
 Voice: senior, sharp, specific. Like a partner who respects the reader's time. No cheerleading, no hedging, no filler.
 
-Format: 3 short paragraphs, roughly 150–200 words total. Plain prose only — no headings, no bullet points, no markdown. Respond with the debrief itself and nothing else: no preamble ("Here is..."), no sign-off, no commentary about your process.`;
+Format: 3 short paragraphs, roughly 150–200 words total. Plain prose only: no headings, no bullet points, no markdown. Respond with the debrief itself and nothing else: no preamble ("Here is..."), no sign-off, no commentary about your process.`;
 
 function isValid(body: unknown): body is CoachRequestBody {
   if (!body || typeof body !== "object") return false;
@@ -69,7 +69,7 @@ function isValid(body: unknown): body is CoachRequestBody {
 const isNum = (x: unknown): x is number =>
   typeof x === "number" && Number.isFinite(x);
 
-/** Risk is optional and advisory — a malformed block is dropped, not rejected. */
+/** Risk is optional and advisory: a malformed block is dropped, not rejected. */
 function sanitizeRisk(risk: unknown): CoachRisk | undefined {
   if (!risk || typeof risk !== "object") return undefined;
   const r = risk as Record<string, unknown>;
@@ -134,7 +134,7 @@ function buildContext(
 ): string {
   const sportPct = Math.round(inputs.weightSport * 100);
   const financePct = Math.round(inputs.weightFinance * 100);
-  // isValid() doesn't pin every result field — never let a crafted body put NaN in the prompt.
+  // isValid() doesn't pin every result field: never let a crafted body put NaN in the prompt.
   const financing = isNum(result.financingCost) ? result.financingCost : 0;
 
   return `THE SEASON THE EXECUTIVE RAN
@@ -150,7 +150,7 @@ Decisions (front-office spend and pricing):
     BUDGET,
   )} budget${
     result.overBudget
-      ? ` (OVER BUDGET — the board financed the gap, charging ${formatMoney(financing)} in emergency financing)`
+      ? ` (OVER BUDGET: the board financed the gap, charging ${formatMoney(financing)} in emergency financing)`
       : ""
   }
 - Success weighting: ${sportPct}% sporting / ${financePct}% financial
@@ -203,13 +203,13 @@ function buildFallbackBrief(inputs: SeasonInputs, result: SeasonResult): string 
   const financing = isNum(result.financingCost) ? result.financingCost : 0;
   const financingNote =
     financing > 0
-      ? ` Spending also ran ${formatMoney(result.controllable - BUDGET)} past the ${formatMoney(BUDGET)} cap, and the board financed the gap — ${formatMoney(financing)} of the result is that emergency facility.`
+      ? ` Spending also ran ${formatMoney(result.controllable - BUDGET)} past the ${formatMoney(BUDGET)} cap, and the board financed the gap: ${formatMoney(financing)} of the result is that emergency facility.`
       : "";
 
   return [
     `You finished ${ordinal(result.position)} in a ${TEAMS}-team table with ${result.points} points and a net result of ${formatMoneySigned(result.net)}.`,
     `Wages absorbed ${wageShare}% of the ${formatMoney(result.controllable)} you put through the front office, and you ran ${priceNote} at $${inputs.price}. Sponsorship landed at ${formatMoney(result.sponsorship)} and player trading delivered ${formatMoney(result.playerSales)}.${financingNote}`,
-    `The story of the year is the tradeoff between table finish and cash on hand — the lesson the board will want to talk through next. This is the sample memo; the live coach also weighs the strategies you didn't pick and the risk profile of the one you did.`,
+    `The story of the year is the tradeoff between table finish and cash on hand: the lesson the board will want to talk through next. This is the sample memo; the live coach also weighs the strategies you didn't pick and the risk profile of the one you did.`,
   ].join("\n\n");
 }
 
@@ -287,7 +287,7 @@ export async function POST(request: Request) {
           // leaving a silent half-debrief.
           controller.enqueue(
             encoder.encode(
-              "\n\n(The live debrief was interrupted — press Regenerate to retry.)",
+              "\n\n(The live debrief was interrupted: press Regenerate to retry.)",
             ),
           );
         }

@@ -27,7 +27,7 @@ const DELTA_SETTLE_MS = 1500;
  * Deltas against the last settled outcome. While the user drags, changes
  * accumulate against the anchor taken before they started moving; once the
  * numbers hold still for a beat, the anchor re-bases and the chips fade.
- * Works for slider drags, presets and shared-URL loads alike — no wiring
+ * Works for slider drags, presets and shared-URL loads alike: no wiring
  * to the controls needed.
  */
 function useOutcomeDeltas(result: SeasonResult): OutcomeDeltas | null {

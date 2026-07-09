@@ -165,7 +165,7 @@
     background: var(--color-hairline);
   }
 
-  /* Shared accent button — size (padding / text size) applied per call site. */
+  /* Shared accent button: size (padding / text size) applied per call site. */
   .fo-btn-primary {
     display: inline-flex;
     align-items: center;
@@ -190,7 +190,7 @@
     opacity: 0.7;
   }
 
-  /* Shared quiet pill button — the secondary action everywhere (copy chips,
+  /* Shared quiet pill button: the secondary action everywhere (copy chips,
      pin, preset chips). Callers may override border/color for active states. */
   .fo-btn-secondary {
     display: inline-flex;

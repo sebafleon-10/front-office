@@ -12,7 +12,7 @@ import {
 import { runSeason, type SeasonInputs, type SeasonResult } from "./engine";
 
 /**
- * The Monte Carlo layer. The deterministic engine stays untouched — this
+ * The Monte Carlo layer. The deterministic engine stays untouched: this
  * module draws seeded season shocks, replays the same decisions across many
  * seasons, and summarizes the spread. Same inputs + same seed always produce
  * the same summary, so the distribution itself is testable.
@@ -42,7 +42,7 @@ export interface MonteCarloSummary {
   pProfit: number;
   /** Share of seasons finishing in the bottom three. */
   pBottomThree: number;
-  /** The full result of the run with median club health — one honest sampled season. */
+  /** The full result of the run with median club health: one honest sampled season. */
   medianRun: SeasonResult;
 }
 
@@ -51,7 +51,7 @@ export interface SimulateOptions {
   seed?: number;
 }
 
-/** Deterministic 32-bit PRNG — tiny, seedable, good enough for season noise. */
+/** Deterministic 32-bit PRNG: tiny, seedable, good enough for season noise. */
 function mulberry32(seed: number): () => number {
   let a = seed >>> 0;
   return () => {

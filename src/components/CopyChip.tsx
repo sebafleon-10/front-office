@@ -19,7 +19,7 @@ export function CopyChip({ label, copiedLabel = "Copied", getText }: CopyChipPro
       setCopied(true);
       window.setTimeout(() => setCopied(false), 1500);
     } catch {
-      // Clipboard unavailable — silently no-op, same as CoachPanel.
+      // Clipboard unavailable: silently no-op, same as CoachPanel.
     }
   }
 

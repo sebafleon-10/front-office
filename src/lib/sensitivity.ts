@@ -5,7 +5,7 @@ import { LEVERS, type LeverKey } from "./levers";
 /**
  * Marginal analysis at the current plan: what one more increment on each
  * lever does to the season. Pure orchestration over the deterministic
- * engine — every figure here is a real runSeason diff, so the panel can
+ * engine: every figure here is a real runSeason diff, so the panel can
  * never disagree with the P&L.
  */
 
@@ -22,7 +22,7 @@ export interface MarginalImpact {
   deltaNet: number;
   /** Places climbed (positive) or dropped (negative) from the probe. */
   deltaPosition: number;
-  /** Lever already at its range maximum — no probe possible. */
+  /** Lever already at its range maximum: no probe possible. */
   atMax: boolean;
 }
 

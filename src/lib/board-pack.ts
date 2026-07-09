@@ -9,7 +9,7 @@ import {
 } from "./format";
 
 /**
- * Plain-text season summary for the clipboard — pastes cleanly into an
+ * Plain-text season summary for the clipboard: pastes cleanly into an
  * email, a doc, or a chat. Pure function so it's unit-testable.
  */
 
@@ -29,7 +29,7 @@ export function formatBoardPack(d: BoardPackData): string {
   const sportPct = Math.round(inputs.weightSport * 100);
 
   const lines: string[] = [
-    `FRONT OFFICE — SEASON BOARD PACK`,
+    `FRONT OFFICE: SEASON BOARD PACK`,
     `${YOUR_CLUB_NAME} · USL League Two · one season`,
     ``,
     `DECISIONS`,

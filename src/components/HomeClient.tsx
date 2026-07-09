@@ -52,7 +52,7 @@ interface SeasonRun {
 
 interface HomeClientProps {
   initialState: ControlState;
-  /** True when the URL carried plan params — those win over local storage. */
+  /** True when the URL carried plan params: those win over local storage. */
   fromUrl: boolean;
 }
 
@@ -243,7 +243,7 @@ export function HomeClient({ initialState, fromUrl }: HomeClientProps) {
                 About the model
               </a>
               <span className="hidden text-[12px] text-[var(--color-text-subtle)] sm:inline">
-                Your plan updates live — run it when you&rsquo;re ready
+                Your plan updates live, run it when you&rsquo;re ready
               </span>
             </div>
           </div>
@@ -258,7 +258,7 @@ export function HomeClient({ initialState, fromUrl }: HomeClientProps) {
             Draft your plan. Then run the season.
           </h1>
           <p className="mt-1 max-w-[640px] text-[14px] text-[var(--color-text-muted)]">
-            Everything below updates live as you move a lever — that is the
+            Everything below updates live as you move a lever: that is the
             plan on paper. When you are ready, run it through a thousand
             seasons of luck and hear the board&rsquo;s verdict.
           </p>
@@ -353,7 +353,7 @@ export function HomeClient({ initialState, fromUrl }: HomeClientProps) {
               Built by Sebastian León
             </span>
             <span>
-              Clubs, numbers and league are an internal model — not affiliated
+              Clubs, numbers and league are an internal model, not affiliated
               with any real league.
             </span>
           </div>

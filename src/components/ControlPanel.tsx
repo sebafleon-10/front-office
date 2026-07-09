@@ -44,7 +44,7 @@ export function ControlPanel({
   onReset,
   onRun,
 }: ControlPanelProps) {
-  // One quiet first-visit line — gone the moment they touch anything.
+  // One quiet first-visit line, gone the moment they touch anything.
   const [showHint, setShowHint] = useState(false);
   const hintDismissed = useRef(false);
   useEffect(() => {
@@ -89,7 +89,7 @@ export function ControlPanel({
               transition={{ duration: 0.2 }}
               className="mt-1 text-[12px] text-[var(--color-accent)]"
             >
-              Start by moving Player wages — everything recomputes live.
+              Start by moving Player wages: everything recomputes live.
             </motion.p>
           )}
         </AnimatePresence>

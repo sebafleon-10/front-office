@@ -4,13 +4,13 @@ import type { MonteCarloSummary } from "./simulate";
 /**
  * Local persistence: a refresh keeps the plan you were working on. A URL with
  * state params always wins over storage (links must open exactly as sent).
- * Every access is wrapped — private browsing or blocked storage degrades to
+ * Every access is wrapped: private browsing or blocked storage degrades to
  * a stateless page, never a crash.
  */
 
 const KEY = "fo-state-v2";
 // v1 predates rival variance and the financing penalty, so a pinned plan's
-// stored Monte Carlo summary no longer matches what the engine produces —
+// stored Monte Carlo summary no longer matches what the engine produces, so we
 // migrate the model-independent parts (lever state, hint flags) and drop
 // the stale pin rather than let old and new model numbers mix on screen.
 const LEGACY_KEY = "fo-state-v1";
@@ -70,7 +70,7 @@ export function saveStored(session: StoredSession): void {
     if (typeof window === "undefined") return;
     window.localStorage.setItem(KEY, JSON.stringify(session));
   } catch {
-    // Storage unavailable — nothing to do.
+    // Storage unavailable: nothing to do.
   }
 }
 

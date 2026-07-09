@@ -17,7 +17,7 @@ export default function Error({
           The season hit a snag.
         </h1>
         <p className="mt-3 text-[14px] leading-relaxed text-[var(--color-text-muted)]">
-          Something went wrong rendering the club. Your decisions are safe — the
+          Something went wrong rendering the club. Your decisions are safe: the
           engine is deterministic, so reloading rebuilds the exact same season.
         </p>
         {error.digest ? (

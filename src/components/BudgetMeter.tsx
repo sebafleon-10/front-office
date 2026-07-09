@@ -45,7 +45,7 @@ export function BudgetMeter({ controllable, overBudget }: BudgetMeterProps) {
         {overBudget ? (
           <span className="text-[var(--color-loss)]">
             <span className="font-medium">Over budget.</span>{" "}
-            {formatMoney(controllable - BUDGET)}{" "}above the cap — the board
+            {formatMoney(controllable - BUDGET)}{" "}above the cap: the board
             finances the gap at {Math.round(OVERAGE_FINANCING_RATE * 100)}%,
             costing{" "}
             {formatMoney((controllable - BUDGET) * OVERAGE_FINANCING_RATE)}{" "}

@@ -46,7 +46,7 @@ const CHAIN: { step: string; body: string }[] = [
   },
   {
     step: "Points become placement",
-    body: "You drop into a reference ladder of 11 rivals (9 to 31 points) — the league at par. Your rank is 1 plus however many rivals finished above you — beat 31 and you are champion. In Run the season, every rival's total varies with the same luck yours does.",
+    body: "You drop into a reference ladder of 11 rivals (9 to 31 points): the league at par. Your rank is 1 plus however many rivals finished above you. Beat 31 and you are champion. In Run the season, every rival's total varies with the same luck yours does.",
   },
   {
     step: "Placement and books become health",
@@ -78,7 +78,7 @@ const LEVER_ITEMS: {
     par: "Health only",
     feeds: "Club health score",
     plain:
-      "Your definition of success. It touches nothing in the table or the books — only how the one headline number is blended.",
+      "Your definition of success. It touches nothing in the table or the books, only how the one headline number is blended.",
     rule: "Health = weight_sport × sport score + weight_finance × finance score.",
     example:
       "Slide it to 100% sport and a profitable mid-table season scores worse than a trophy that lost money.",
@@ -89,7 +89,7 @@ const REVENUE: { name: string; formula: string; note: string }[] = [
   {
     name: "Matchday tickets",
     formula: `attendance × price × ${HOME} home games`,
-    note: "The core gate receipts — the biggest single line for most strategies.",
+    note: "The core gate receipts: the biggest single line for most strategies.",
   },
   {
     name: "Concessions",
@@ -109,7 +109,7 @@ const REVENUE: { name: string; formula: string; note: string }[] = [
   {
     name: "Prize money",
     formula: `(${TEAMS + 1} − placement) × ${formatCompactMoney(PRIZE_STEP)}`,
-    note: `1st earns ${formatMoney(TEAMS * PRIZE_STEP)}, last earns ${formatMoney(PRIZE_STEP)} — every place is worth ${formatCompactMoney(PRIZE_STEP)}.`,
+    note: `1st earns ${formatMoney(TEAMS * PRIZE_STEP)}, last earns ${formatMoney(PRIZE_STEP)}: every place is worth ${formatCompactMoney(PRIZE_STEP)}.`,
   },
   {
     name: "Player trading",
@@ -122,7 +122,7 @@ const COSTS: { name: string; formula: string; note: string }[] = [
   {
     name: "Front office spend",
     formula: "wages + academy + marketing + facilities + commercial",
-    note: `Your five money levers added up, against a ${formatCompactMoney(BUDGET)} budget. The board will let you cross it — but not for free.`,
+    note: `Your five money levers added up, against a ${formatCompactMoney(BUDGET)} budget. The board will let you cross it, but not for free.`,
   },
   {
     name: "Matchday operating",
@@ -144,11 +144,11 @@ const COSTS: { name: string; formula: string; note: string }[] = [
 const SIMPLIFICATIONS: { name: string; body: string }[] = [
   {
     name: "Rivals don't react to you",
-    body: "The plan view ranks you against the league at par, and even in Run the season rivals draw luck, not strategy — no one counter-bids your wage spend. Modeling rival behavior would teach game theory; this model teaches your own tradeoffs first.",
+    body: "The plan view ranks you against the league at par, and even in Run the season rivals draw luck, not strategy: no one counter-bids your wage spend. Modeling rival behavior would teach game theory; this model teaches your own tradeoffs first.",
   },
   {
     name: "One season, not a cycle",
-    body: "Academy investment pays out inside the same season. In reality youth development is a three-to-five-year bet — the model compresses that velocity so a single sitting can feel the whole loop.",
+    body: "Academy investment pays out inside the same season. In reality youth development is a three-to-five-year bet: the model compresses that velocity so a single sitting can feel the whole loop.",
   },
   {
     name: "Overhead never scales",
@@ -156,7 +156,7 @@ const SIMPLIFICATIONS: { name: string; body: string }[] = [
   },
   {
     name: "Sponsorship is your pie alone",
-    body: "Sponsor money responds to your success and fanbase but no rival competes for the same local deals. A shared, zero-sum sponsor market is a real force in lower leagues — and out of scope on purpose.",
+    body: "Sponsor money responds to your success and fanbase but no rival competes for the same local deals. A shared, zero-sum sponsor market is a real force in lower leagues, and out of scope on purpose.",
   },
 ];
 
@@ -164,7 +164,7 @@ const SCORES: { name: string; range: string; body: string }[] = [
   {
     name: "Sport score",
     range: "0–100",
-    body: "Purely placement. 1st is 100, last is 0, linear in between. Money never touches it directly — only where you finish.",
+    body: "Purely placement. 1st is 100, last is 0, linear in between. Money never touches it directly, only where you finish.",
   },
   {
     name: "Finance score",
@@ -190,13 +190,13 @@ export function AboutModel() {
           <p className="mt-3 text-[14px] leading-relaxed text-[var(--color-text-muted)]">
             Nothing here is hidden. One deterministic engine takes your eight
             decisions and walks a fixed causal chain from spend to squad to
-            table to books — the same plan always produces the same season.
+            table to books: the same plan always produces the same season.
             The only luck in the product lives in Run the season, which
-            replays this exact engine under seeded noise on form and turnout
-            — for your club and every rival — to show the spread around your
+            replays this exact engine under seeded noise on form and turnout,
+            for your club and every rival, to show the spread around your
             plan. Every
             figure below traces back to the same formulas that drive the
-            panels above — move a lever and watch the whole chain re-settle.
+            panels above: move a lever and watch the whole chain re-settle.
           </p>
         </header>
 
@@ -357,7 +357,7 @@ export function AboutModel() {
           <BlockLabel>What this model deliberately ignores</BlockLabel>
           <p className="mb-4 text-[13px] leading-relaxed text-[var(--color-text-muted)]">
             A model earns trust by naming its edges. These four forces are
-            real in lower-league football and left out on purpose — each one
+            real in lower-league football and left out on purpose: each one
             traded away to keep cause and effect legible in a single sitting.
           </p>
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">

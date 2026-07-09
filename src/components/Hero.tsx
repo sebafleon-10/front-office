@@ -62,7 +62,7 @@ export function Hero() {
               style={stagger(2)}
             >
               The board hands you $1.2M and one season. Six decisions decide
-              where you finish and whether the books survive it — and the
+              where you finish and whether the books survive it, and the
               board is watching both.
             </p>
 
@@ -102,7 +102,7 @@ export function Hero() {
                 width={1600}
                 height={1100}
                 priority
-                sizes="(max-width: 1024px) 90vw, 720px"
+                sizes="(max-width: 1024px) 90vw, 1440px"
                 className="block h-auto w-full"
               />
             </div>

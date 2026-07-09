@@ -51,7 +51,7 @@ export function SeasonRunPanel({
         </button>
       </header>
 
-      {/* Plain conditional render — AnimatePresence mode="wait" freezes if the
+      {/* Plain conditional render: AnimatePresence mode="wait" freezes if the
           tab is hidden mid-transition (rAF pauses), leaving the panel stuck. */}
       {summary ? (
           <motion.div
@@ -63,7 +63,7 @@ export function SeasonRunPanel({
           >
             {stale && (
               <p className="mb-4 rounded-[8px] border border-[var(--color-hairline)] bg-[var(--color-surface-1)] px-3 py-2 text-[12px] text-[var(--color-text-muted)]">
-                Plan changed since this run — run it again to refresh the odds.
+                Plan changed since this run. Run it again to refresh the odds.
               </p>
             )}
 
@@ -105,7 +105,7 @@ export function SeasonRunPanel({
             <div className="mt-5 flex flex-wrap items-center justify-between gap-3">
               <p className="text-[12px] leading-relaxed text-[var(--color-text-subtle)]">
                 {summary.runs.toLocaleString("en-US")}{" "}seasons of the same
-                plan, different luck — seeded noise on form (the week-to-week
+                plan, different luck: seeded noise on form (the week-to-week
                 swing in results) and turnout, over the exact deterministic
                 engine, for your club and every rival alike. The dashboard
                 above is the league at par; here the whole table breathes.
@@ -119,7 +119,7 @@ export function SeasonRunPanel({
           </motion.div>
         ) : (
           <p className="text-[14px] leading-relaxed text-[var(--color-text-muted)]">
-            The dashboard above is your plan on paper — the season an average
+            The dashboard above is your plan on paper: the season an average
             run of luck produces. Football is not played on paper. Run this
             plan through 1,000 simulated seasons of swings in form (the
             week-to-week luck of results) and turnout, and see the range you

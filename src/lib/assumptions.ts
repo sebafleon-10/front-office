@@ -5,7 +5,7 @@ export const TEAMS = 12;
 export const BUDGET = 1_200_000;
 
 /*
- * OVERAGE_FINANCING_RATE — the board does not block an over-cap plan, it
+ * OVERAGE_FINANCING_RATE: the board does not block an over-cap plan, it
  * finances the gap, and that money is not free. Spend above the budget is
  * charged at 12% for the season, priced like the emergency working-capital
  * facility a lower-league club would actually lean on (short-term, unsecured,
@@ -75,24 +75,24 @@ export const FIN_SCORE_SCALE = 500_000;
 /*
  * Monte Carlo layer ("Run the season").
  *
- * PPG_SD — a single game pays 0, 1 or 3 points. For a mid-table side
+ * PPG_SD: a single game pays 0, 1 or 3 points. For a mid-table side
  * (roughly 36% wins, 27% draws at the league-average 1.35 ppg) one game's
  * points carry a standard deviation of about 1.3, so the season-average
  * ppg noise over 14 independent games is 1.3 / √14 ≈ 0.35. We shade that
  * to 0.30 because part of real scorelines is explained by the quality gap
  * already priced into the deterministic mean.
  *
- * CONVERSION_SD — season-average turnout swings with weather, kickoff
+ * CONVERSION_SD: season-average turnout swings with weather, kickoff
  * times and the fixture draw; ±10% across a season at two sigma gives a
  * multiplicative sd of 0.05.
  *
  * Rivals share the same luck: each rival's season-average ppg takes a
  * normal shock of sd PPG_SD per run (clamped to the same ppg bounds), so
  * the whole table varies together. RIVAL_POINTS below is the league at
- * par — the fixed reference ladder the deterministic plan view ranks
+ * par: the fixed reference ladder the deterministic plan view ranks
  * against (documented in About the model).
  *
- * Zero shocks reproduce the deterministic engine exactly — a gold test
+ * Zero shocks reproduce the deterministic engine exactly: a gold test
  * pins that invariance.
  */
 export const PPG_SD = 0.3;

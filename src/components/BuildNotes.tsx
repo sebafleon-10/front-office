@@ -2,7 +2,7 @@ import { Card, CardEyebrow, CardTitle } from "./Card";
 
 /**
  * The closing section: how the thing was actually built. Prose-forward on
- * purpose — this is the part of the page that answers "is this real?"
+ * purpose: this is the part of the page that answers "is this real?"
  */
 export function BuildNotes() {
   return (
@@ -25,7 +25,7 @@ export function BuildNotes() {
                 The club&rsquo;s economics started life as a financial model in
                 Excel, with the causal chain wired as live formulas. The engine
                 behind this page is that model ported to a pure TypeScript
-                function — and a gold set of unit tests asserts the port
+                function, and a gold set of unit tests asserts the port
                 reproduces the spreadsheet to the dollar across four reference
                 strategies, plus every boundary the model can hit. The playable
                 app and the spreadsheet tell the exact same story.
@@ -51,8 +51,8 @@ Grow fanbase      6th   net -$54,876   ±$0.50`}
                 Deterministic core, probabilistic shell
               </h3>
               <p className="mt-2 text-[14px] leading-relaxed text-[var(--color-text-muted)]">
-                Run the season layers seeded Monte Carlo noise — form, turnout
-                and every rival&rsquo;s season, a thousand replays — on top of
+                Run the season layers seeded Monte Carlo noise (form, turnout
+                and every rival&rsquo;s season, a thousand replays) on top of
                 the untouched engine.
                 Zero noise reproduces the deterministic season bit for bit,
                 and the seeded distribution itself is pinned by tests. The
@@ -71,7 +71,7 @@ Grow fanbase      6th   net -$54,876   ±$0.50`}
                 writes a word, the server re-runs all four reference
                 strategies through the engine under your own sport-to-finance
                 weighting, so every counterfactual in the memo is
-                engine-exact — the model is instructed to never invent a
+                engine-exact: the model is instructed to never invent a
                 number that isn&rsquo;t in the brief. No API key configured?
                 The app degrades to a deterministic memo, so the demo never
                 breaks.

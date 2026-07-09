@@ -77,7 +77,7 @@ export interface SeasonShocks {
   conversion: number;
   /**
    * The rivals' season totals for this run. Omitted, the fixed reference
-   * league (RIVAL_POINTS) is used — the Monte Carlo layer passes seeded
+   * league (RIVAL_POINTS) is used: the Monte Carlo layer passes seeded
    * variations so the whole table shares your club's luck.
    */
   rivalPoints?: readonly number[];
@@ -154,7 +154,7 @@ export function buildLeagueTable(
   rows.sort((a, b) => {
     if (b.points !== a.points) return b.points - a.points;
     // Ties go to your club, matching the position formula (which counts
-    // only rivals strictly above you) — the table must agree with the rank.
+    // only rivals strictly above you): the table must agree with the rank.
     if (a.isYourClub) return -1;
     if (b.isYourClub) return 1;
     return 0;
