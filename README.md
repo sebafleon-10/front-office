@@ -2,7 +2,7 @@
 
 An interactive business simulation for running a lower-league soccer club for one season. Set six decisions, weight what success means, and watch the league finish and full season finances respond live — then replay the plan through 1,000 seasons of luck and have an AI coach debrief the strategy.
 
-**Live demo:** [front-office-cyan.vercel.app](https://front-office-cyan.vercel.app/)
+**Live demo:** [sebafleon-front-office.vercel.app](https://sebafleon-front-office.vercel.app/)
 
 ## Run it
 
